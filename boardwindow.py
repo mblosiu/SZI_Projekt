@@ -10,7 +10,6 @@ from sections import FloraSection, PaperSection, ClothSection, FoodSection, \
     TechSection
 
 
-
 class RandomItem(QTableWidgetItem):
 
     def __init__(self):
@@ -34,6 +33,13 @@ class PathCell(QTableWidgetItem):
         self.setBackground(QColor(32, 88, 240))
 
 
+class BlankCell(QTableWidgetItem):
+
+    def __init__(self):
+        super().__init__()
+        self.setBackground(QColor(64, 64, 64))
+
+
 class GameBoard(QTableWidget):
 
     item_spawned = pyqtSignal(int, int)
@@ -43,6 +49,10 @@ class GameBoard(QTableWidget):
 
     def __init__(self, rows, columns, board):
         super().__init__(rows, columns)
+
+        for x in range(self.rowCount()):
+            for y in range(self.columnCount()):
+                self.setItem(x, y, BlankCell())
 
         self.board = board
         self.__add_obstacles()
@@ -58,7 +68,7 @@ class GameBoard(QTableWidget):
         for i in range(random.randint(5, 25)):
             rand_x = random.randint(1, self.rowCount() - 2)
             rand_y = random.randint(0, self.columnCount() - 1)
-            if self.item(rand_x, rand_y) is None:
+            if isinstance(self.item(rand_x, rand_y), BlankCell):
                 self.setItem(rand_x, rand_y, Obstacle())
 
     def __add_sections(self):
@@ -76,12 +86,12 @@ class GameBoard(QTableWidget):
 
     @pyqtSlot(int, int)
     def remove_item(self, x, y):
-        self.setItem(x, y, QTableWidgetItem())
+        self.setItem(x, y, BlankCell())
 
     @pyqtSlot()
     def spawn_item(self):
         rand = random.randrange(self.columnCount())
-        if self.item(0, rand) is None:
+        if isinstance(self.item(0, rand), BlankCell):
             y = random.randrange(self.columnCount())
             self.setItem(0, y, RandomItem())
             self.board_items.append((0, y))
@@ -89,8 +99,11 @@ class GameBoard(QTableWidget):
 
     @pyqtSlot(int, int, QTableWidgetItem)
     def move_cart(self, x, y, cart):
+        cart_x = cart.row()
+        cart_y = cart.column()
         self.takeItem(cart.row(), cart.column())
         self.setItem(x, y, cart)
+        self.setItem(cart_x, cart_y, BlankCell())
 
 
 class Cart(QTableWidgetItem):
@@ -110,7 +123,6 @@ class Cart(QTableWidgetItem):
     def calc_route(self, x, y):
         if self.is_route_calculated() is False:
             self.route_calculated = True
-            print(x, y)
             self.cartastar(x, y)
 
     class Palette:
@@ -161,7 +173,7 @@ class Cart(QTableWidgetItem):
                     else:
                         random_item = random.randrange(len(self.table.board_items))
                         random_item = self.table.board_items[random_item]
-                        print(random_item)
+                        # print(random_item)
                         self.cartastar(random_item[0], random_item[1])
 
     # FIXME BIG
@@ -192,12 +204,12 @@ class Cart(QTableWidgetItem):
         for i in came_from.values():
             if i is not None:
                 if i != cart_coordinates and i != goal_coordinates:
-                    if self.table.item(i[0], i[1]) is None:
+                    if isinstance(self.table.item(i[0], i[1]), BlankCell):
                         self.path.append(i)
                         self.table.setItem(i[0], i[1], PathCell())
 
+        print(self.path)
         self.goal_coords = goal_coordinates
-        # print(self.path)
 
     def neighbors(self, pos):
         (x, y) = pos
@@ -208,8 +220,8 @@ class Cart(QTableWidgetItem):
             neighbor = (x + direction[0], y + direction[1])
             if 0 <= neighbor[0] < self.table.rowCount() \
                     and 0 <= neighbor[1] < self.table.columnCount():
-                # if self.table.item(neighbor[0], neighbor[1]) is None:
-                result.append(neighbor)
+                if not isinstance(self.table.item(neighbor[0], neighbor[1]), Obstacle):
+                    result.append(neighbor)
 
         return result
 
@@ -244,10 +256,6 @@ class BoardWindow(QWidget):
 
         for i in range(self.table.columnCount()):
             self.table.setColumnWidth(i, 60)
-
-        # for x in range(self.table.rowCount()):
-        #     for y in range(self.table.columnCount()):
-        #         self.table.setItem(x, y, QTableWidgetItem())
 
         self.cart = Cart(random.randrange(1, self.table.rowCount() - 1),
                          random.randrange(0, self.table.columnCount() - 1), self.table)
