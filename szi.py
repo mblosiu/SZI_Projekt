@@ -44,4 +44,17 @@ class SziWindow(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = SziWindow()
+
+    sys._excepthook = sys.excepthook
+
+
+    def exception_hook(exctype, value, traceback):
+        print(exctype, value, traceback)
+        sys._excepthook(exctype, value, traceback)
+        sys.exit(1)
+
+
+    sys.excepthook = exception_hook
+
+    # BoardWindow.item_spawned.connect(Cart.calc_route)
     app.exec()
