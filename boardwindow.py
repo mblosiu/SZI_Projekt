@@ -46,6 +46,7 @@ class GameBoard(QTableWidget):
     cart_moved = pyqtSignal(int, int, QTableWidgetItem)
     cart_picked_item = pyqtSignal()
     cart_picked_item_pos = pyqtSignal(int, int)
+    cart_dropped_item = pyqtSignal()
 
     def __init__(self, rows, columns, board):
         super().__init__(rows, columns)
@@ -60,13 +61,14 @@ class GameBoard(QTableWidget):
 
         self.board_items = []
 
-        self.cart_picked_item.connect(self.board.add_item_info)
+        self.cart_picked_item.connect(self.board.set_item_info)
+        self.cart_dropped_item.connect(self.board.set_item_info)
         self.cart_picked_item_pos.connect(self.remove_item)
         self.cart_moved.connect(self.move_cart)
 
     def __add_obstacles(self):
         for i in range(random.randint(5, 25)):
-            rand_x = random.randint(1, self.rowCount() - 2)
+            rand_x = random.randint(2, self.rowCount() - 3)
             rand_y = random.randint(0, self.columnCount() - 1)
             if isinstance(self.item(rand_x, rand_y), BlankCell):
                 self.setItem(rand_x, rand_y, Obstacle())
@@ -87,6 +89,10 @@ class GameBoard(QTableWidget):
     @pyqtSlot(int, int)
     def remove_item(self, x, y):
         self.setItem(x, y, BlankCell())
+        # print(self.board_items)
+        # print((x, y))
+        self.board_items.remove((x, y))
+
 
     @pyqtSlot()
     def spawn_item(self):
@@ -114,8 +120,8 @@ class Cart(QTableWidgetItem):
     def coordinates(self):
         return self.x, self.y
 
-    def items(self):
-        return self.palette.items
+    # def items(self):
+    #     return self.palette.items
 
     def holds_item(self):
         return len(self.palette.items) > 0
@@ -123,7 +129,7 @@ class Cart(QTableWidgetItem):
     def calc_route(self, x, y):
         if self.is_route_calculated() is False:
             self.route_calculated = True
-            self.cartastar(x, y)
+            self.cartastar(x + 1, y)
 
     class Palette:
         def __init__(self, capacity: int, items: list):
@@ -137,14 +143,15 @@ class Cart(QTableWidgetItem):
         self.x = x
         self.y = y
         self.table = table
-        self.table.item_spawned.connect(self.calc_route)
         self.palette = self.Palette(1, [])
         self.route_calculated = False
         self.path = []
         self.move_timer = QTimer()
         self.goal_coords = None
-        self.move_timer.timeout.connect(self.move_cart)
         self.item = None
+
+        self.table.item_spawned.connect(self.calc_route)
+        self.move_timer.timeout.connect(self.move_cart)
 
     def move_cart(self):
         if len(self.path) > 0:
@@ -157,11 +164,13 @@ class Cart(QTableWidgetItem):
                     if self.item is None:
                         self.item = 1
                         self.palette.items.append("Przedmiot 1")
-                        self.table.cart_picked_item_pos.emit(self.goal_coords[0],
-                                                         self.goal_coords[1])
+                        self.table.cart_picked_item_pos.emit(
+                            self.goal_coords[0] - 1, self.goal_coords[1])
+                        self.table.cart_picked_item.emit()
                     else:
                         self.item = None
                         self.palette.items.pop(0)
+                        self.table.cart_dropped_item.emit()
 
                     # Przenieś przedmiot do sekcji
                     if self.item == 1:
@@ -173,8 +182,7 @@ class Cart(QTableWidgetItem):
                     else:
                         random_item = random.randrange(len(self.table.board_items))
                         random_item = self.table.board_items[random_item]
-                        # print(random_item)
-                        self.cartastar(random_item[0], random_item[1])
+                        self.cartastar(random_item[0] + 1, random_item[1])
 
     # FIXME BIG
     def cartastar(self, goal_x, goal_y):
@@ -194,7 +202,9 @@ class Cart(QTableWidgetItem):
                 break
 
             for next_item in self.neighbors(current):
+
                 new_cost = cost_so_far[current] + 1
+
                 if next_item not in cost_so_far or new_cost < cost_so_far[next_item]:
                     cost_so_far[next_item] = new_cost
                     priority = new_cost + self.heuristic(goal_coordinates, next_item)
@@ -208,8 +218,20 @@ class Cart(QTableWidgetItem):
                         self.path.append(i)
                         self.table.setItem(i[0], i[1], PathCell())
 
-        print(self.path)
+        # print(self.path)
+
+        print(came_from.values())
         self.goal_coords = goal_coordinates
+        print(self.goal_coords)
+        # if self.item is not None:
+        #     # self.goal_coords = (goal_coordinates[0] - 1, goal_coordinates[1])
+        #     pos = self.path.pop(len(self.path) - 1)
+        #     self.path.append((pos[0] - 1, pos[1]))
+        #     # self.path[len(self.path) - 1]
+        # else:
+        #     pos = self.path.pop(len(self.path) - 1)
+        #     self.path.append((pos[0] + 1, pos[1]))
+
 
     def neighbors(self, pos):
         (x, y) = pos
@@ -218,8 +240,8 @@ class Cart(QTableWidgetItem):
 
         for direction in directions:
             neighbor = (x + direction[0], y + direction[1])
-            if 0 <= neighbor[0] < self.table.rowCount() \
-                    and 0 <= neighbor[1] < self.table.columnCount():
+            if 0 <= neighbor[0] <= self.table.rowCount() \
+                    and 0 <= neighbor[1] <= self.table.columnCount():
                 if not isinstance(self.table.item(neighbor[0], neighbor[1]), Obstacle):
                     result.append(neighbor)
 
@@ -229,6 +251,7 @@ class Cart(QTableWidgetItem):
     def heuristic(a, b):
         (x1, y1) = a
         (x2, y2) = b
+        # print(abs(x1 - x2) + abs(y1 - y2))
         return abs(x1 - x2) + abs(y1 - y2)
 
 
@@ -268,7 +291,7 @@ class BoardWindow(QWidget):
         lin = QVBoxLayout()
         lin.addWidget(QLabel("Program: Wózek widłowy"))
 
-        self.cart_items = QLabel(f"Przedmioty: {self.cart.items()}")
+        self.cart_items = QLabel(f"Przedmioty: {self.cart.palette.items}")
         lin.addWidget(self.cart_items)
 
         lin.addWidget(self.table)
@@ -294,6 +317,6 @@ class BoardWindow(QWidget):
             self.start_simulation()
 
     @pyqtSlot()
-    def add_item_info(self):
-        self.cart_items.setText(f"Przedmioty: {self.cart.items()}")
+    def set_item_info(self):
+        self.cart_items.setText(f"Przedmioty: {self.cart.palette.items}")
 
