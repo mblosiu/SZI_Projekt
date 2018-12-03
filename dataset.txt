@@ -1,0 +1,24 @@
+sprzęt RTV widełki:(twardość: 8-10, waga, wielkość[1-20], kształt: 1-10, skupienie: 1-5)
+Żywność: (twardość: 1-5, waga, wielkość[1-7], kształt: 25-50, skupienie: 25 - 100)
+Ogrodnictwo: (twardość: 1-3, waga, wielkość[1-10], kształt: 45-50, skupienie: 1-100)
+Art. papiernicze: (twardość: 5-10, waga, wielkość[1-20], kształt: 1-50, skupienie: 1)
+odzież: (twardość: 1-3, waga, wielkość[1-20], kształt: 1-20, skupienie:1)
+
+Twardość: 1-10 (1 - miękkie, 10 - twarde)
+Waga: 1-20 (1 - lekkie, 20 - twarde)
+Wielkość: 1-20 (1 - małe, 20 - duże)
+Kształt: 1-50 (1 - kanciaste, 50 - okrągłe)
+Skupienie: 1-100(1 - stałe, 100 - luźne)
+
+[
+	{
+		twardosc: ,
+		waga: ,
+		wielkosc: ,
+		ksztalt: ,
+		skupienie: ,
+		nazwa: ,
+		typ: 
+	}
+]
+
