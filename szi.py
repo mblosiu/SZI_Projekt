@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtCore import pyqtSlot, QObject
 from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
 
-from board import BoardWindow, Cart
+from boardwindow import BoardWindow
 
 
 class SziWindow(QWidget):
@@ -55,6 +55,4 @@ if __name__ == '__main__':
 
 
     sys.excepthook = exception_hook
-
-    # BoardWindow.item_spawned.connect(Cart.calc_route)
     app.exec()
