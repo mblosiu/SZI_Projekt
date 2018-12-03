@@ -189,8 +189,16 @@ class Cart(QTableWidgetItem):
         cart_coordinates = (self.row(), self.column())
         goal_coordinates = (goal_x, goal_y)
 
+        coming_back = False
+        if self.item is not None:
+            coming_back = True
+
         frontier = PQueue()
-        frontier.put(cart_coordinates, 0)
+
+        if coming_back:
+            frontier.put(cart_coordinates, 10000)
+        else:
+            frontier.put(cart_coordinates, 0)
 
         came_from = {cart_coordinates: None}
         cost_so_far = {cart_coordinates: 0}
@@ -202,14 +210,24 @@ class Cart(QTableWidgetItem):
                 break
 
             for next_item in self.neighbors(current):
+                new_cost = 0
+                if coming_back:
+                    new_cost = cost_so_far[current] - 1
+                else:
+                    new_cost = cost_so_far[current] + 1
 
-                new_cost = cost_so_far[current] + 1
-
-                if next_item not in cost_so_far or new_cost < cost_so_far[next_item]:
-                    cost_so_far[next_item] = new_cost
-                    priority = new_cost + self.heuristic(goal_coordinates, next_item)
-                    frontier.put(next_item, priority)
-                    came_from[next_item] = current
+                if coming_back:
+                    if next_item not in cost_so_far or new_cost > cost_so_far[next_item]:
+                        cost_so_far[next_item] = new_cost
+                        priority = new_cost + self.heuristic(goal_coordinates, next_item)
+                        frontier.put(next_item, priority)
+                        came_from[next_item] = current
+                else:
+                    if next_item not in cost_so_far or new_cost < cost_so_far[next_item]:
+                        cost_so_far[next_item] = new_cost
+                        priority = new_cost + self.heuristic(goal_coordinates, next_item)
+                        frontier.put(next_item, priority)
+                        came_from[next_item] = current
 
         for i in came_from.values():
             if i is not None:
@@ -219,10 +237,10 @@ class Cart(QTableWidgetItem):
                         self.table.setItem(i[0], i[1], PathCell())
 
         # print(self.path)
-
-        print(came_from.values())
+        #
+        # print(came_from.values())
         self.goal_coords = goal_coordinates
-        print(self.goal_coords)
+        # print(self.goal_coords)
         # if self.item is not None:
         #     # self.goal_coords = (goal_coordinates[0] - 1, goal_coordinates[1])
         #     pos = self.path.pop(len(self.path) - 1)
