@@ -1,5 +1,6 @@
 import heapq
 import random
+from math import *
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimer
 from PyQt5.QtGui import QColor, QIcon
@@ -85,11 +86,16 @@ class GameBoard(QTableWidget):
 
         for section in self.sections:
             self.setItem(section.x, section.y, section)
+	
+    def clean_board_items():
+        for el in self.board_items:
+            if(isinstance(self.item(el[0], el[1]), BlankCell)):
+                self.board_items.remove(el)
 
     @pyqtSlot(int, int)
     def remove_item(self, x, y):
         self.setItem(x, y, BlankCell())
-        # print(self.board_items)
+        print(self.board_items)
         # print((x, y))
         self.board_items.remove((x, y))
 
@@ -189,16 +195,9 @@ class Cart(QTableWidgetItem):
         cart_coordinates = (self.row(), self.column())
         goal_coordinates = (goal_x, goal_y)
 
-        coming_back = False
-        if self.item is not None:
-            coming_back = True
-
         frontier = PQueue()
 
-        if coming_back:
-            frontier.put(cart_coordinates, 10000)
-        else:
-            frontier.put(cart_coordinates, 0)
+        frontier.put(cart_coordinates, 10000)
 
         came_from = {cart_coordinates: None}
         cost_so_far = {cart_coordinates: 0}
@@ -210,24 +209,13 @@ class Cart(QTableWidgetItem):
                 break
 
             for next_item in self.neighbors(current):
-                new_cost = 0
-                if coming_back:
-                    new_cost = cost_so_far[current] - 1
-                else:
-                    new_cost = cost_so_far[current] + 1
+                new_cost = cost_so_far[current] - 1
 
-                if coming_back:
-                    if next_item not in cost_so_far or new_cost > cost_so_far[next_item]:
-                        cost_so_far[next_item] = new_cost
-                        priority = new_cost + self.heuristic(goal_coordinates, next_item)
-                        frontier.put(next_item, priority)
-                        came_from[next_item] = current
-                else:
-                    if next_item not in cost_so_far or new_cost < cost_so_far[next_item]:
-                        cost_so_far[next_item] = new_cost
-                        priority = new_cost + self.heuristic(goal_coordinates, next_item)
-                        frontier.put(next_item, priority)
-                        came_from[next_item] = current
+                if next_item not in cost_so_far or new_cost > cost_so_far[next_item]:
+                    cost_so_far[next_item] = new_cost
+                    priority = new_cost + self.heuristic(goal_coordinates, next_item)
+                    frontier.put(next_item, priority)
+                    came_from[next_item] = current
 
         for i in came_from.values():
             if i is not None:
@@ -270,7 +258,8 @@ class Cart(QTableWidgetItem):
         (x1, y1) = a
         (x2, y2) = b
         # print(abs(x1 - x2) + abs(y1 - y2))
-        return abs(x1 - x2) + abs(y1 - y2)
+        # return abs(x1 - x2) + abs(y1 - y2)
+        return sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2))
 
 
 class PQueue:
