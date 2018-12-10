@@ -1,44 +1,71 @@
+import enum
 import sys
 
-from PyQt5.QtCore import pyqtSlot, QObject
-from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton
+from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QWidget, QApplication, QVBoxLayout, QPushButton, \
+    QLabel
 
 from boardwindow import BoardWindow
+
+
+class TeachingMethod(enum.Enum):
+    DECISION_TREE = 1,
+    GENETIC_ALGORITHM = 2,
+    NEURAL_NETWORK = 3
 
 
 class SziWindow(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.init_ui()
-        self.board_window = BoardWindow()
-
-    def init_ui(self):
         self.setWindowTitle("AI - Wózek widłowy")
-        self.setLayout(self.get_start_menu())
+        self.setLayout(self.init_ui())
         self.show()
 
-    def get_start_menu(self):
-        methods_layout = QVBoxLayout()
-        methods_layout.setContentsMargins(75, 75, 75, 75)
+    class TeachingMethodButton(QPushButton):
 
-        teaching_methods = [
-            "Drzewa decyzyjne",
-            "Algorytmy genetyczne",
-            "Sieci neuronowe"
-        ]
+        def __init__(self, method_id: TeachingMethod, text: str):
+            super().__init__()
+            self.method_id = method_id
+            self.setText(text)
+
+    def init_ui(self):
+        menu_layout = QVBoxLayout()
+
+        name = QLabel("Agent: Wózek widłowy")
+        name.setAlignment(Qt.AlignCenter)
+        menu_layout.addWidget(name)
+
+        icon = QPixmap("images/forklift.svg")
+
+        icon_label = QLabel()
+        icon_label.setPixmap(icon)
+        icon_label.setAlignment(Qt.AlignCenter)
+
+        menu_layout.addWidget(icon_label)
+
+        teaching_methods = {
+            TeachingMethod.DECISION_TREE: "Drzewa decyzyjne",
+            TeachingMethod.GENETIC_ALGORITHM: "Algorytm genetyczny",
+            TeachingMethod.NEURAL_NETWORK: "Sieci neuronowe"
+        }
 
         for method in teaching_methods:
-            method_button = QPushButton(method)
-            method_button.clicked.connect(self.use_teaching_method)
-            methods_layout.addWidget(method_button)
+            method_button = self.TeachingMethodButton(method,
+                                                      teaching_methods[method])
+            method_button.clicked.connect(lambda state,
+                                                 m=method,
+                                                 s=teaching_methods[method]:
+                                          self.use_teaching_method(m, s))
+            menu_layout.addWidget(method_button)
 
-        return methods_layout
+        return menu_layout
 
-    @pyqtSlot()
-    def use_teaching_method(self):
-        self.board_window.use_method(self.sender().text())
-        self.board_window.show()
+    @pyqtSlot(int, str)
+    def use_teaching_method(self, method: TeachingMethod, method_name: str):
+        board_window = BoardWindow(method_name)
+        board_window.use_method(method)
 
 
 if __name__ == '__main__':
@@ -46,13 +73,10 @@ if __name__ == '__main__':
     win = SziWindow()
 
     sys._excepthook = sys.excepthook
-
-
     def exception_hook(exctype, value, traceback):
         print(exctype, value, traceback)
         sys._excepthook(exctype, value, traceback)
         sys.exit(1)
-
-
     sys.excepthook = exception_hook
+
     app.exec()

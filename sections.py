@@ -4,39 +4,37 @@ from PyQt5.QtWidgets import QTableWidgetItem
 
 class Section(QTableWidgetItem):
 
-    def __init__(self, x, y, color, text):
+    def __init__(self, icon):
         super().__init__()
-        self.setBackground(color)
-        self.setText(text)
-        self.x = x
-        self.y = y
+        #self.setIcon(icon)
+        self.setBackground(QColor(icon))
 
 
 class TechSection(Section):
 
-    def __init__(self, x, y):
-        super().__init__(x, y, QColor(240, 0, 240), "Sprzęt RTV")
+    def __init__(self):
+        super().__init__(QColor(240, 0, 240))
 
 
 class FoodSection(Section):
 
-    def __init__(self, x, y):
-        super().__init__(x, y, QColor(240, 240, 0), "Żywność")
+    def __init__(self):
+        super().__init__(QColor(240, 240, 0))
 
 
 class ClothSection(Section):
 
-    def __init__(self, x, y):
-        super().__init__(x, y, QColor(0, 240, 240), "Odzież")
+    def __init__(self):
+        super().__init__(QColor(0, 240, 240))
 
 
 class PaperSection(Section):
 
-    def __init__(self, x, y):
-        super().__init__(x, y, QColor(127, 120, 64), "Art. papierowe")
+    def __init__(self):
+        super().__init__(QColor(127, 120, 64))
 
 
 class FloraSection(Section):
 
-    def __init__(self, x, y):
-        super().__init__(x, y, QColor(0, 230, 15), "Ogrodnictwo")
+    def __init__(self):
+        super().__init__(QColor(0, 230, 15))
