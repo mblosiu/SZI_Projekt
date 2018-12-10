@@ -43,6 +43,7 @@ class GameBoard(QTableWidget):
         self.clean()
 
         self.cart = None
+        self.current_field = BlankCell()
         self.calculated_cart_path = False
         self.overwritten_items = []
         self.cart_path = []
@@ -209,9 +210,28 @@ class GameBoard(QTableWidget):
             self.cart.setIcon(self.cart.rightward_icon)
         if x - cart_x == 0 and y - cart_y == -1:
             self.cart.setIcon(self.cart.leftward_icon)
-
         self.takeItem(self.cart.row(), self.cart.column())
+        self.setItem(cart_x, cart_y, self.current_field)
+		
+        if isinstance(self.item(x, y), GlassNuisance):
+            self.current_field = GlassNuisance()
+        elif isinstance(self.item(x, y), PlankNuisance):
+            self.current_field = PlankNuisance()
+        elif isinstance(self.item(x, y), BlankCell):
+            self.current_field = BlankCell()
+        else:
+            self.current_field = WaterNuisance()
+		
         self.setItem(x, y, self.cart)
+		
+        # self.takeItem(self.cart.row(), self.cart.column())
+		
+        # self.takeItem(self.cart.row(), self.cart.column())
+        # self.setItem(cart_x, cart_y, self.current_field)
+
+
+        # self.setItem(x, y, self.cart)
+        # self.setItem(cart_x, cart_y, BlankCell())
 
     @pyqtSlot()
     def start_simulation(self):
