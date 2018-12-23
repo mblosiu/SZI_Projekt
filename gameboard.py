@@ -1,6 +1,7 @@
 import heapq
 import math
 import random
+from collections import deque
 
 from PyQt5.QtCore import pyqtSlot, QTimer, pyqtSignal
 from PyQt5.QtWidgets import QTableWidget
@@ -28,13 +29,6 @@ class PQueue:
 
 class GameBoard(QTableWidget):
 
-    item_spawned = pyqtSignal(int, int)
-    cart_moved = pyqtSignal(int, int)
-    cart_picked_item_pos = pyqtSignal(int, int)
-    cart_item_changed = pyqtSignal(str)
-
-    calculated_cart_path_changed = pyqtSignal(bool)
-
     def __init__(self, rows, columns, board):
         super().__init__(rows, columns, board)
 
@@ -42,10 +36,12 @@ class GameBoard(QTableWidget):
 
         self.clean()
 
-        self.cart = None
-        self.current_field = BlankCell()
-        self.calculated_cart_path = False
-        self.overwritten_items = []
+        self.item_queue = deque()
+        rand_y = random.randrange(0, self.columnCount())
+        self.setItem(0, rand_y, RandomItem())
+        self.item_queue.append((0, rand_y))
+
+        self.cart = Cart()
         self.cart_path = []
         self.add_cart()
 
@@ -55,17 +51,31 @@ class GameBoard(QTableWidget):
         self.sections = []
         self.add_sections()
 
-        self.board_items = []
-
         self.spawn_timer = QTimer()
         self.cart_mover_timer = QTimer()
 
-        self.item_spawned.connect(self.calculate_cart_path)
-        self.cart_moved.connect(self.move_cart_pos)
-        self.cart_picked_item_pos.connect(self.remove_item)
-        self.cart_item_changed.connect(self.board.set_item_info)
+        self.picked_item.connect(self.remove_item)
+        self.picked_item.connect(self.find_path)
 
-    def cart_coordinates(self):
+        self.dropped_item.connect(self.put_item)
+        self.dropped_item.connect(self.find_path)
+
+        self.item_changed.connect(self.board.set_item_info)
+
+        self.overwritten_objects = []
+
+        # self.cellClicked.connect(self.test)
+
+    # @pyqtSlot(int, int)
+    # def test(self, x, y):
+    #     print(self.item(x, y))
+
+    item_changed = pyqtSignal(str)
+    item_spawned = pyqtSignal(tuple)
+    picked_item = pyqtSignal()
+    dropped_item = pyqtSignal()
+
+    def cart_pos(self):
         return self.cart.row(), self.cart.column()
 
     def clean(self):
@@ -86,7 +96,6 @@ class GameBoard(QTableWidget):
         if y is None:
             y = random.randrange(0, self.columnCount())
 
-        self.cart = Cart()
         self.setItem(x, y, self.cart)
 
     def add_obstacles(self, count=random.randint(0, 30)):
@@ -106,16 +115,13 @@ class GameBoard(QTableWidget):
 
             if self.is_blank(x, y):
                 rand_type = random.randrange(nuisances)
-                generated_nuisance = None
 
                 if rand_type == 0:
-                    generated_nuisance = GlassNuisance()
+                    self.setItem(x, y, GlassNuisance())
                 elif rand_type == 1:
-                    generated_nuisance = PlankNuisance()
+                    self.setItem(x, y, PlankNuisance())
                 elif rand_type == 2:
-                    generated_nuisance = WaterNuisance()
-
-                self.setItem(x, y, generated_nuisance)
+                    self.setItem(x, y, WaterNuisance())
 
     def add_sections(self):
 
@@ -179,121 +185,78 @@ class GameBoard(QTableWidget):
         (x2, y2) = b
         return math.sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2))
 
-    # TODO ?
-    def clean_board_items(self):
-        for el in self.board_items:
-            if isinstance(self.item(el[0], el[1]), BlankCell):
-                self.board_items.remove(el)
-
-    @pyqtSlot()
-    def spawn_item(self):
-        rand = random.randrange(self.columnCount())
-
-        if self.is_blank(0, rand):
-            y = random.randrange(self.columnCount())
-            random_item = RandomItem()
-            self.setItem(0, y, random_item)
-            self.board_items.append(random_item)
-            self.item_spawned.emit(0, y)
-
-    @pyqtSlot(int, int)
-    def move_cart_pos(self, x, y):
-
-        cart_x = self.cart.row()
-        cart_y = self.cart.column()
-
-        if x - cart_x == 1 and y - cart_y == 0:
-            self.cart.setIcon(self.cart.backward_icon)
-        if x - cart_x == -1 and y - cart_y == 0:
-            self.cart.setIcon(self.cart.forward_icon)
-        if x - cart_x == 0 and y - cart_y == 1:
-            self.cart.setIcon(self.cart.rightward_icon)
-        if x - cart_x == 0 and y - cart_y == -1:
-            self.cart.setIcon(self.cart.leftward_icon)
-        self.takeItem(self.cart.row(), self.cart.column())
-        self.setItem(cart_x, cart_y, self.current_field)
-		
-        if isinstance(self.item(x, y), GlassNuisance):
-            self.current_field = GlassNuisance()
-        elif isinstance(self.item(x, y), PlankNuisance):
-            self.current_field = PlankNuisance()
-        elif isinstance(self.item(x, y), BlankCell):
-            self.current_field = BlankCell()
-        else:
-            self.current_field = WaterNuisance()
-		
-        self.setItem(x, y, self.cart)
-		
-        # self.takeItem(self.cart.row(), self.cart.column())
-		
-        # self.takeItem(self.cart.row(), self.cart.column())
-        # self.setItem(cart_x, cart_y, self.current_field)
-
-
-        # self.setItem(x, y, self.cart)
-        # self.setItem(cart_x, cart_y, BlankCell())
-
     @pyqtSlot()
     def start_simulation(self):
         self.spawn_timer.timeout.connect(self.spawn_item)
         self.spawn_timer.start(1000)
-        self.cart_mover_timer.timeout.connect(self.move_cart)
-        self.cart_mover_timer.start(75)
+        self.cart_mover_timer.timeout.connect(self.move_cart_pos)
+        self.cart_mover_timer.start(150)
+        self.find_path()
 
     @pyqtSlot()
-    def drop_cart_item(self):
+    def spawn_item(self):
+        y = random.randrange(self.columnCount())
+
+        if self.is_blank(0, y):
+            self.setItem(0, y, RandomItem())
+            self.item_queue.append((0, y))
+
+    @pyqtSlot()
+    def put_item(self):
         self.cart.set_item(None)
+        self.item_changed.emit("Nic")
 
     @pyqtSlot()
-    def move_cart(self):
+    def move_cart_pos(self):
         if len(self.cart_path) > 0:
-            if self.cart_path[0] is not None:
-                self.cart_moved.emit(self.cart_path[0][0], self.cart_path[0][1])
-                popped_item = self.cart_path.pop(0)
+            cart_x, cart_y = self.cart_pos()
 
-                if len(self.cart_path) == 0 and not self.cart.has_item():
-                    picked_item = self.board_items.pop(0)
-                    # self.cart_picked_item_pos.emit(popped_item[0],
-                    #                                popped_item[1])
-                    self.cart.set_item(picked_item)
-                    self.cart_item_changed.emit(picked_item.get_attributes())
+            item = self.takeItem(self.cart_path[0][0],
+                                 self.cart_path[0][1])
 
-                    rand_section = random.randrange(len(self.sections))
-                    self.calculated_cart_path = False
-                    self.calculate_cart_path(
-                        self.sections[rand_section].row(),
-                        self.sections[rand_section].column())
-                    # self.calculated_cart_path = False
-                elif len(self.cart_path) == 0 and self.cart.has_item():
-                    self.cart.set_item(None)
-                    self.cart_item_changed.emit("Brak")
-                    self.calculated_cart_path = False
-                    rand_item = random.randrange(len(self.board_items))
-                    self.calculate_cart_path(
-                        self.board_items[rand_item].row(),
-                        self.board_items[rand_item].column())
+            self.takeItem(cart_x, cart_y)
 
+            self.setItem(self.cart_path[0][0], self.cart_path[0][1],
+                         self.cart)
 
+            if len(self.overwritten_objects) == 0:
+                self.setItem(cart_x, cart_y, BlankCell())
 
-        # TODO
-        if len(self.cart_path) == 0:
-            self.calculated_cart_path = False
-            self.calculated_cart_path_changed.emit(False)
+            if len(self.overwritten_objects) > 0:
+                self.setItem(cart_x, cart_y,
+                             self.overwritten_objects.pop(0))
 
-    @pyqtSlot(int, int)
-    def remove_item(self, x, y):
-        self.setItem(x, y, BlankCell())
+            self.overwritten_objects.append(item)
 
-    @pyqtSlot(int, int)
-    def calculate_cart_path(self, x, y):
-        if not self.calculated_cart_path:
-            self.calculated_cart_path = True
-            self.calculated_cart_path_changed.emit(True)
+            self.cart_path.pop(0)
 
-            route = self.astar(self.cart_coordinates(), (x, y))
+        if len(self.cart_path) == 0 and not self.cart.has_item():
+            self.picked_item.emit()
 
-            for point in route.values():
-                if point is not None and point != self.cart_coordinates():
-                    if self.is_passable(point[0], point[1]):
+        if len(self.cart_path) == 0 and self.cart.has_item():
+            self.dropped_item.emit()
+
+    @pyqtSlot()
+    def remove_item(self):
+        picked_item = self.item_queue.popleft()
+        self.cart.set_item(self.item(picked_item[0], picked_item[1]))
+        self.item_changed.emit(self.cart.get_item().get_attributes())
+        self.setItem(picked_item[0], picked_item[1], BlankCell())
+
+    @pyqtSlot()
+    def find_path(self):
+
+        if self.cart.has_item():
+            random_section = random.choice(self.sections)
+            x, y = random_section.row(), random_section.column()
+        else:
+            next_item = self.item_queue[0]
+            x, y = next_item[0] + 1, next_item[1]
+
+        route = self.astar(self.cart_pos(), (x, y))
+
+        for point in route.values():
+            if point and point != self.cart_pos():
+                if self.is_passable(point[0], point[1]):
+                    if (point[0], point[1]) not in self.cart_path:
                         self.cart_path.append(point)
-

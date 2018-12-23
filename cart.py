@@ -1,22 +1,31 @@
+import enum
+
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QTableWidgetItem
-
-from board_items import RandomItem
 
 
 class Cart(QTableWidgetItem):
 
-    def __init__(self):
+    class Orientation(enum.Enum):
+        NORTH = 1,
+        EAST = 2,
+        SOUTH = 3,
+        WEST = 4
+
+    def __init__(self, orientation: Orientation=Orientation.NORTH):
         super().__init__()
-        self.setIcon(QIcon("images/forklift.svg"))
-        self.forward_icon = QIcon("images/forklift_front.png")
-        self.backward_icon = QIcon("images/forklift_back.png")
-        self.rightward_icon = QIcon("images/forklift_right.png")
-        self.leftward_icon = QIcon("images/forklift_left.png")
-        # self.has_item = False
+
+        self.icon_dict = {
+            self.Orientation.NORTH: QIcon("images/forklift_front.png"),
+            self.Orientation.EAST: QIcon("images/forklift_right.png"),
+            self.Orientation.SOUTH: QIcon("images/forklift_back.png"),
+            self.Orientation.WEST: QIcon("images/forklift_left.png")
+        }
+
+        self.setIcon(self.icon_dict[orientation])
         self.item = None
 
-    def set_item(self, item: RandomItem):
+    def set_item(self, item):
         self.item = item
 
     def get_item(self):
