@@ -4,7 +4,7 @@ from pprint import pprint
 class DecisionTree:
     
     def __init__(self):
-        with open('dataset2.json') as f:
+        with open('dataset.json') as f:
             self.data = json.load(f)
         self.tree = {}
             
@@ -112,7 +112,3 @@ class DecisionTree:
             nodes = self.getAllResults(choosen)
             if len(nodes) > 0:
                 self.addNodeToTree(choosen, nodes[0])
-
-t = DecisionTree()
-t.getTree([])
-print(t.tree)
