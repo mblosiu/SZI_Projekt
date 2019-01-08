@@ -11,7 +11,7 @@ from cart import Cart
 from nuisances import PlankNuisance, GlassNuisance, WaterNuisance
 from sections import FoodSection, TechSection, FloraSection, PaperSection, \
     ClothSection
-
+from DecisionTree import DecisionTree
 
 class PQueue:
     def __init__(self):
@@ -29,11 +29,17 @@ class PQueue:
 
 class GameBoard(QTableWidget):
 
-    def __init__(self, rows, columns, board):
+    def __init__(self, rows, columns, board, method):
         super().__init__(rows, columns, board)
 
         self.board = board
 
+        if method == 'Drzewa decyzyjne':
+            self.method = 1
+            self.tree = DecisionTree()
+            self.tree.getTree([])
+        else:
+            self.method = 0
         self.clean()
 
         self.item_queue = deque()
