@@ -32,7 +32,7 @@ class BoardWindow(QWidget):
         self.cart_items.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(self.cart_items)
 
-        table = GameBoard(20, 20, self)
+        table = GameBoard(20, 20, self, method)
 
         for i in range(table.columnCount()):
             table.setColumnWidth(i, 25)
