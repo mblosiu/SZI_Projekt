@@ -273,7 +273,6 @@ class GameBoard(QTableWidget):
             x, y = next_item[0] + 1, next_item[1]
 
         route = self.astar(self.cart_pos(), (x, y))
-        print(route)
 
         for point in route.values():
             if point and point != self.cart_pos():
@@ -301,5 +300,3 @@ class GameBoard(QTableWidget):
                     self.cart_directions.append('l')
                 elif self.cart_path[i-1][1] < self.cart_path[i][1]:
                     self.cart_directions.append('r')
-        print(len(self.cart_path))
-        print(len(self.cart_directions))
