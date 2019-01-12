@@ -112,3 +112,53 @@ class DecisionTree:
             nodes = self.getAllResults(choosen)
             if len(nodes) > 0:
                 self.addNodeToTree(choosen, nodes[0])
+
+    def predict(self, choosen):
+        attr = []
+        for i in range(0, 5):
+            attr.append(choosen[i])
+            try:
+                if i == 0:
+                    type = self.tree[attr[0]]
+                if i == 1:
+                    type = self.tree[attr[0], attr[1]]
+                if i == 2:
+                    type = self.tree[attr[0], attr[1], attr[2]]
+                if i == 3:
+                    type = self.tree[attr[0], attr[1], attr[2], attr[3]]
+                if i == 4:
+                    type = self.tree[attr[0], attr[1], attr[2], attr[3], attr[4]]
+                return type
+            except KeyError:
+                type = ''
+        return 'error'
+
+if __name__ == "__main__":
+    with open('dataset.json') as f:
+        data = json.load(f)
+        
+    tree = DecisionTree()
+    tree.getTree([])
+
+    true = 0
+    false = 0
+    error = 0
+
+    for el in data:
+        choosen = []
+        choosen.append(el['twardosc'])
+        choosen.append(el['waga'])
+        choosen.append(el['wielkosc'])
+        choosen.append(el['ksztalt'])
+        choosen.append(el['skupienie'])
+        type = tree.predict(choosen)
+        if type == el['typ']:
+            true += 1
+        elif type == 'error':
+            error += 1
+        else:
+            false += 1
+            print(type, el['typ'])
+    print('true: ', true)
+    print('false:', false)
+    print('error:', error)
