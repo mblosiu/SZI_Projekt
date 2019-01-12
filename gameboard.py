@@ -49,6 +49,7 @@ class GameBoard(QTableWidget):
 
         self.cart = Cart()
         self.cart_path = []
+        self.cart_directions = []
         self.add_cart()
 
         self.add_obstacles()
@@ -214,16 +215,27 @@ class GameBoard(QTableWidget):
 
     @pyqtSlot()
     def move_cart_pos(self):
-        if len(self.cart_path) > 0:
+        if len(self.cart_directions) > 0:
             cart_x, cart_y = self.cart_pos()
 
-            item = self.takeItem(self.cart_path[0][0],
-                                 self.cart_path[0][1])
+            if self.cart_directions[0] == 'u':
+                next_x, next_y = cart_x - 1, cart_y
+            if self.cart_directions[0] == 'd':
+                next_x, next_y = cart_x + 1, cart_y
+            if self.cart_directions[0] == 'l':
+                next_x, next_y = cart_x, cart_y - 1
+            if self.cart_directions[0] == 'r':
+                next_x, next_y = cart_x, cart_y + 1
+
+            item = self.takeItem(next_x, next_y)
 
             self.takeItem(cart_x, cart_y)
 
-            self.setItem(self.cart_path[0][0], self.cart_path[0][1],
+            # self.setItem(self.cart_path[0][0], self.cart_path[0][1],
+                         # self.cart)
+            self.setItem(next_x, next_y,
                          self.cart)
+            
 
             if len(self.overwritten_objects) == 0:
                 self.setItem(cart_x, cart_y, BlankCell())
@@ -235,11 +247,12 @@ class GameBoard(QTableWidget):
             self.overwritten_objects.append(item)
 
             self.cart_path.pop(0)
+            self.cart_directions.pop(0)
 
-        if len(self.cart_path) == 0 and not self.cart.has_item():
+        if len(self.cart_directions) == 0 and not self.cart.has_item():
             self.picked_item.emit()
 
-        if len(self.cart_path) == 0 and self.cart.has_item():
+        if len(self.cart_directions) == 0 and self.cart.has_item():
             self.dropped_item.emit()
 
     @pyqtSlot()
@@ -248,7 +261,7 @@ class GameBoard(QTableWidget):
         self.cart.set_item(self.item(picked_item[0], picked_item[1]))
         self.item_changed.emit(self.cart.get_item().get_attributes())
         self.setItem(picked_item[0], picked_item[1], BlankCell())
-
+    
     @pyqtSlot()
     def find_path(self):
 
@@ -260,9 +273,33 @@ class GameBoard(QTableWidget):
             x, y = next_item[0] + 1, next_item[1]
 
         route = self.astar(self.cart_pos(), (x, y))
+        print(route)
 
         for point in route.values():
             if point and point != self.cart_pos():
                 if self.is_passable(point[0], point[1]):
                     if (point[0], point[1]) not in self.cart_path:
                         self.cart_path.append(point)
+        
+        cart_x, cart_y = self.cart_pos()
+        for i in range(0, len(self.cart_path)):
+            if i == 0:
+                if cart_x > self.cart_path[i][0]:
+                    self.cart_directions.append('u')
+                elif cart_x < self.cart_path[i][0]:
+                    self.cart_directions.append('d')
+                elif cart_y > self.cart_path[i][1]:
+                    self.cart_directions.append('l')
+                elif cart_y < self.cart_path[i][1]:
+                    self.cart_directions.append('r')
+            else:
+                if self.cart_path[i-1][0] > self.cart_path[i][0]:
+                    self.cart_directions.append('u')
+                elif self.cart_path[i-1][0] < self.cart_path[i][0]:
+                    self.cart_directions.append('d')
+                elif self.cart_path[i-1][1] > self.cart_path[i][1]:
+                    self.cart_directions.append('l')
+                elif self.cart_path[i-1][1] < self.cart_path[i][1]:
+                    self.cart_directions.append('r')
+        print(len(self.cart_path))
+        print(len(self.cart_directions))
