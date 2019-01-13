@@ -266,8 +266,27 @@ class GameBoard(QTableWidget):
     def find_path(self):
 
         if self.cart.has_item():
-            random_section = random.choice(self.sections)
-            x, y = random_section.row(), random_section.column()
+            if self.method == 1:
+                # print(self.cart.get_item().size)
+                attr = [self.cart.get_item().hardness, self.cart.get_item().weight, self.cart.get_item().size, self.cart.get_item().shape, self.cart.get_item().condensation]
+                type = self.tree.predict(attr)
+                print(type)
+                if type == 'RTV':
+                    section = self.sections[0]
+                elif type == 'Zywnosc':
+                    section = self.sections[1]
+                elif type == 'Ogrodnictwo':
+                    section = self.sections[2]
+                elif type == 'Art. Pap.':
+                    section = self.sections[3]
+                elif type == 'odziez':
+                    section = self.sections[4]
+                else:
+                    random_section = random.choice(self.sections)
+                x, y = section.row(), section.column()
+            else:
+                random_section = random.choice(self.sections)
+                x, y = random_section.row(), random_section.column()
         else:
             next_item = self.item_queue[0]
             x, y = next_item[0] + 1, next_item[1]

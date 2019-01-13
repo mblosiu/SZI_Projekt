@@ -162,3 +162,36 @@ if __name__ == "__main__":
     print('true: ', true)
     print('false:', false)
     print('error:', error)
+    
+    tw = ['twarde', 'miekkie', 'kruche']
+    wa = ['ciezkie', 'lekkie', 'srednie']
+    wi = ['male', 'srednie']
+    ksz = ['prostokatny', 'okragly', 'kolisty', 'brak', ]
+    sk = ['stale', 'ciekly']
+    
+    true = 0
+    false = 0
+    error = 0
+    
+    for el1 in tw:
+        for el2 in wa:
+            for el3 in wi:
+                for el4 in ksz:
+                    for el5 in sk:
+                        wyb = []
+                        wyb.append(el1)
+                        wyb.append(el2)
+                        wyb.append(el3)
+                        wyb.append(el4)
+                        wyb.append(el5)
+                        
+                        type = tree.predict(wyb)
+                        if type == 'error':
+                            error += 1
+                            print(wyb)
+                        else:
+                            true += 1
+                            
+    print('true: ', true)
+    print('errors: ', error)
+    print(tree.tree)

@@ -12,11 +12,17 @@ class RandomItem(QTableWidgetItem):
         super().__init__()
         self.setIcon(QIcon("images/package.png"))
 
-        self.hardness = random.randint(1, 10)
-        self.weight = random.randint(1, 20)
-        self.size = random.randint(1, 20)
-        self.shape = random.randint(1, 10)
-        self.condensation = random.randint(1, 5)
+        hardness = ['twarde', 'miekkie', 'kruche']
+        weight = ['ciezkie', 'lekkie', 'srednie']
+        size = ['male', 'srednie']
+        shape = ['prostokatny', 'okragly', 'kolisty', 'brak', ]
+        condensation = ['stale', 'ciekly']
+        
+        self.hardness = hardness[random.randint(0, 2)]
+        self.weight = weight[random.randint(0, 2)]
+        self.size = size[random.randint(0, 1)]
+        self.shape = shape[random.randint(0, 3)]
+        self.condensation = condensation[random.randint(0, 1)]
 
         self.attributes = {
             "twardosc": self.hardness,

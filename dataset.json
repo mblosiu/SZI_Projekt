@@ -223,5 +223,203 @@
 		"skupienie": "stale",
 		"nazwa": "skarpetki",
 		"typ": "odziez"
-	}	
+	},
+	{
+		"twardosc": "twarde",
+		"waga": "lekkie",
+		"wielkosc": "male",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekly",
+		"nazwa": "bidon",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "twarde",
+		"waga": "lekkie",
+		"wielkosc": "male",
+		"ksztalt": "okragly",
+		"skupienie": "ciekly",
+		"nazwa": "Nawoz",
+		"typ": "Ogrodnictwo"
+	},
+	{
+		"twardosc": "twarde",
+		"waga": "lekkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "Antena Sat.",
+		"typ": "RTV"
+	},
+	{
+		"twardosc": "twarde",
+		"waga": "lekkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekly",
+		"nazwa": "Nawoz",
+		"typ": "Ogrodnictwo"
+	},
+	{
+		"twardosc": "twarde",
+		"waga": "lekkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "Chleb",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "twarde",
+		"waga": "lekkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "ciekly",
+		"nazwa": "Woda",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "prostokatny",
+		"skupienie": "stale",
+		"nazwa": "dysk twardy",
+		"typ": "RTV"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekly",
+		"nazwa": "ocieplacz do rak",
+		"typ": "odziez"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "okragly",
+		"skupienie": "stale",
+		"nazwa": "Owoc",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "okragly",
+		"skupienie": "ciekly",
+		"nazwa": "Arbuz",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "Arbuz",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekly",
+		"nazwa": "woda",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "woda",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "ciekly",
+		"nazwa": "ubrania",
+		"typ": "odziez"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "stale",
+		"nazwa": "spodnie",
+		"typ": "odziez"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekly",
+		"nazwa": "sok",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "stale",
+		"nazwa": "kask",
+		"typ": "odziez"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "ciekly",
+		"nazwa": "buklak",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "plyta",
+		"typ": "RTV"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekly",
+		"nazwa": "spray do kwiatow",
+		"typ": "Ogrodnictwo"
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "Klej",
+		"typ": "Art. Pap."
+	},
+	{
+		"twardosc": "miekkie",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "ciekly",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	}
 ]
