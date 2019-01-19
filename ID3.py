@@ -91,10 +91,11 @@ class DecisionTree:
         gain = 0
         actual = 0
         while i < len(choosen):
-            temp = self.gain(choosen, i)
-            if temp > gain:
-                gain = temp
-                actual = i
+            if choosen[i] == '':
+                temp = self.gain(choosen, i)
+                if temp > gain:
+                    gain = temp
+                    actual = i
             i += 1
         return actual
                     
