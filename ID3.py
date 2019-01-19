@@ -7,12 +7,16 @@ class DecisionTree:
     def __init__(self):
         with open('dataset.json') as f:
             self.data = json.load(f)
-        self.tree = {}
+        # self.tree = {}
+        self.tree = []
+        self.treetypes = []
         self.attr = ['twardosc', 'waga', 'wielkosc', 'ksztalt', 'skupienie']
         self.classes = ['RTV', 'Zywnosc', 'Ogrodnictwo', 'Art. Pap.', 'odziez']
         
     def addNodeToTree(self, choosen, endPoint):
-        self.tree[choosen[0], choosen[1], choosen[2], choosen[3], choosen[4]] = endPoint
+        # self.tree[choosen[0], choosen[1], choosen[2], choosen[3], choosen[4]] = endPoint
+        self.tree.append(choosen)
+        self.treetypes.append(endPoint)
 
     def getAllResults(self, choosen):
         results = []
@@ -195,11 +199,76 @@ class DecisionTree:
             self.addNodeToTree(choosen, nodes[0])
         
     def predict(self, choosen):
-        return 0
+        i = 0
+        while i < len(self.tree):
+            isGood = True
+            if self.tree[i][0] != '':
+                if self.tree[i][0] != choosen[0]:
+                    isGood = False
+            
+            if self.tree[i][1] != '':
+                if self.tree[i][1] != choosen[1]:
+                    isGood = False
+            
+            if self.tree[i][2] != '':
+                if self.tree[i][2] != choosen[2]:
+                    isGood = False
+            
+            if self.tree[i][3] != '':
+                if self.tree[i][3] != choosen[3]:
+                    isGood = False
+            
+            if self.tree[i][4] != '':
+                if self.tree[i][4] != choosen[4]:
+                    isGood = False
+                    
+            if isGood:
+                return self.treetypes[i]
+            i += 1
+        return 'error'
         
 
 if __name__ == "__main__":
     decTree = DecisionTree()
     decTree.getTree([])
-    print(decTree.tree)
+    i = 0
+    while i < len(decTree.tree):
+        print(decTree.tree[i], ' | ', decTree.treetypes[i])
+        i += 1
+
+    tw = ['twarde', 'miekkie', 'kruche']
+    wa = ['ciezkie', 'lekkie', 'srednie']
+    wi = ['male', 'srednie']
+    ksz = ['prostokatny', 'okragly', 'kolisty', 'brak', ]
+    sk = ['stale', 'ciekly']
+    
+    true = 0
+    false = 0
+    error = 0
+    count = 0
+    
+    for el1 in tw:
+        for el2 in wa:
+            for el3 in wi:
+                for el4 in ksz:
+                    for el5 in sk:
+                        wyb = []
+                        wyb.append(el1)
+                        wyb.append(el2)
+                        wyb.append(el3)
+                        wyb.append(el4)
+                        wyb.append(el5)
+                        
+                        type = decTree.predict(wyb)
+                        print(count)
+                        count += 1
+                        if type == 'error':
+                            error += 1
+                            print(wyb)
+                        else:
+                            true += 1
+                            
+    print('true: ', true)
+    print('errors: ', error)
+    # print(decTree.tree)
     # decTree.predict()
