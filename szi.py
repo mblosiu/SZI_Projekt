@@ -47,7 +47,6 @@ class SziWindow(QWidget):
 
         teaching_methods = {
             TeachingMethod.DECISION_TREE: "Drzewa decyzyjne",
-            TeachingMethod.GENETIC_ALGORITHM: "Algorytm genetyczny",
             TeachingMethod.NEURAL_NETWORK: "Sieci neuronowe"
         }
 
