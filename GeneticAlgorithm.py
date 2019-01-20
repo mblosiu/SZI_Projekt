@@ -196,7 +196,12 @@ class GeneticAlgorithm:
         self.path = population.shortest().points
 
     def __str__(self):
-        return f"""Początkowy koszt: {round(self.initial_cost, 2)}\nKońcowy koszt: {round(self.final_cost, 2)}\nTrasa: {self.path}"""
+        s = f"Początkowy koszt: {round(self.initial_cost, 2)}\n"
+        s += f"Końcowy koszt: {round(self.final_cost, 2)}\n"
+        s += "Trasa:\n"
+        for point in self.path:
+            s += f"{point}\n"
+        return s
 
 
 if __name__ == "__main__":

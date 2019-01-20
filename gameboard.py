@@ -93,7 +93,7 @@ class GameBoard(QTableWidget):
     @pyqtSlot()
     def start_simulation(self):
         self.spawn_timer.start(100)
-        self.cart_mover_timer.start(300)
+        self.cart_mover_timer.start(50)
         self.find_path()
 
     def cart_pos(self):
@@ -107,7 +107,7 @@ class GameBoard(QTableWidget):
             for column in range(self.columnCount()):
                 self.setItem(row, column, BlankCell())
 
-    def is_blank(self, x, y):
+    def is_blank(self, x: int, y: int):
         return isinstance(self.item(x, y), BlankCell)
 
     def is_passable(self, x, y):
@@ -115,9 +115,13 @@ class GameBoard(QTableWidget):
         return not isinstance(item, Obstacle)
         # return isinstance(item, BlankCell) or isinstance(item, Nuisance)
 
+    def is_in_bounds(self, coordinates: tuple):
+        x, y = coordinates
+        return 0 <= x < self.rowCount() and 0 <= y < self.columnCount()
+
     def add_cart(self, x=None, y=None):
         if x is None:
-            x = random.randrange(1, self.rowCount() - 1)
+            x = random.randrange(10, self.rowCount() - 1)
         if y is None:
             y = random.randrange(0, self.columnCount())
 
@@ -184,7 +188,10 @@ class GameBoard(QTableWidget):
                 break
 
             for next_item in self.neighbors(current):
+                # print(next_item)
                 new_cost = cost_so_far[current] - 1
+                # new_cost = cost_so_far[current] - self.item(next_item[0],
+                #                                             next_item[1]).cost
 
                 if next_item not in cost_so_far \
                         or new_cost > cost_so_far[next_item]:
@@ -204,9 +211,7 @@ class GameBoard(QTableWidget):
             neighbor = (coordinates[0] + direction[0],
                         coordinates[1] + direction[1])
 
-            if 0 <= neighbor[0] <= self.rowCount() and \
-                    0 <= neighbor[1] <= self.columnCount():
-
+            if self.is_in_bounds(neighbor):
                 if self.is_passable(neighbor[0], neighbor[1]):
                     result.append(neighbor)
 
@@ -266,13 +271,16 @@ class GameBoard(QTableWidget):
             self.cart_directions.pop(0)
 
             if len(self.cart_directions) == 0:
-                self.picked_item.emit()
-
-            # if len(self.cart_directions) == 0 and self.cart.transports_items:
-            #     print("Hello there")
-            #
-            # if len(self.cart_directions) == 0 and self.cart.has_item():
-            #     self.dropped_item.emit()
+                if not self.cart.transports_items:
+                    self.picked_item.emit()
+                else:
+                    if len(self.cart.palette) == 0:
+                        self.cart.transports_items = False
+                        self.dropped_item.emit()
+                    else:
+                        self.cart.palette.pop(0)
+                        self.go_to_section.emit()
+                        self.item_changed.emit(str(self.cart))
 
     @pyqtSlot()
     def remove_item(self):
@@ -323,10 +331,11 @@ class GameBoard(QTableWidget):
 
         # TODO Połączenie z drzewem/siecią
         if self.cart.transports_items:
-            # self.ga_info_changed.emit("Obliczanie drogi..")
             if len(self.cart.sections_to_go) == 0:
+                # self.cart.transports_items = False
+
                 sections = random.sample(self.sections, len(self.sections))
-                # self.cart.sections_to_go.append(self.cart_pos())
+
                 for sec in sections:
                     self.cart.sections_to_go.append((sec.row(), sec.column()))
 
@@ -348,7 +357,7 @@ class GameBoard(QTableWidget):
 
                 cart_x, cart_y = self.cart_pos()
 
-                for i in range(0, len(self.cart_path)):
+                for i in range(len(self.cart_path)):
                     if i == 0:
                         if cart_x > self.cart_path[i][0]:
                             self.cart_directions.append('u')
@@ -367,11 +376,6 @@ class GameBoard(QTableWidget):
                             self.cart_directions.append('l')
                         elif self.cart_path[i - 1][1] < self.cart_path[i][1]:
                             self.cart_directions.append('r')
-
-                if len(self.cart.sections_to_go) == 0:
-                    self.cart.transports_items = False
-                    # TODO
-                    self.cart.palette = []
 
 
 
