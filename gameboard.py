@@ -93,7 +93,7 @@ class GameBoard(QTableWidget):
     @pyqtSlot()
     def start_simulation(self):
         self.spawn_timer.start(100)
-        self.cart_mover_timer.start(150)
+        self.cart_mover_timer.start(300)
         self.find_path()
 
     def cart_pos(self):
@@ -233,10 +233,11 @@ class GameBoard(QTableWidget):
     @pyqtSlot()
     def move_cart_pos(self):
         if len(self.cart_directions) > 0:
-            cart_x, cart_y = self.cart_pos()
 
-            if not self.cart.change_direction(self.cart_directions[0]):
+            if self.cart.change_direction(self.cart_directions[0]):
                 return
+
+            cart_x, cart_y = self.cart_pos()
 
             if self.cart_directions[0] == 'u':
                 next_x, next_y = cart_x - 1, cart_y

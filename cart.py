@@ -57,36 +57,48 @@ class Cart(QTableWidgetItem):
             if self.direction in [Direction.EAST, Direction.WEST]:
                 self.setIcon(self.icon_dict[Direction.NORTH])
                 self.direction = Direction.NORTH
+                return True
             elif self.direction == Direction.SOUTH:
                 self.setIcon(self.icon_dict[Direction.WEST])
                 self.direction = Direction.WEST
-            return True
+                return True
+            else:
+                return False
 
         if direction == 'l':
             if self.direction in [Direction.NORTH, Direction.SOUTH]:
                 self.setIcon(self.icon_dict[Direction.WEST])
                 self.direction = Direction.WEST
+                return True
             elif self.direction == Direction.EAST:
                 self.setIcon(self.icon_dict[Direction.NORTH])
                 self.direction = Direction.NORTH
-            return True
+                return True
+            else:
+                return False
 
         if direction == 'r':
             if self.direction in [Direction.NORTH, Direction.SOUTH]:
                 self.setIcon(self.icon_dict[Direction.EAST])
                 self.direction = Direction.EAST
+                return True
             elif self.direction == Direction.WEST:
                 self.setIcon(self.icon_dict[Direction.NORTH])
                 self.direction = Direction.NORTH
-            return True
+                return True
+            else:
+                return False
 
         if direction == 'd':
             if self.direction in [Direction.EAST, Direction.WEST]:
                 self.setIcon(self.icon_dict[Direction.SOUTH])
                 self.direction = Direction.SOUTH
+                return True
             elif self.direction == Direction.NORTH:
                 self.setIcon(self.icon_dict[Direction.EAST])
                 self.direction = Direction.EAST
-            return True
+                return True
+            else:
+                return False
 
         return False

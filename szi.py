@@ -11,8 +11,7 @@ from boardwindow import BoardWindow
 
 class TeachingMethod(enum.Enum):
     DECISION_TREE = 1,
-    GENETIC_ALGORITHM = 2,
-    NEURAL_NETWORK = 3
+    NEURAL_NETWORK = 2
 
 
 class SziWindow(QWidget):
