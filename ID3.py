@@ -1,5 +1,6 @@
 import json
 import math
+import random
 from pprint import pprint
 
 class DecisionTree:
@@ -97,6 +98,7 @@ class DecisionTree:
         while i < len(choosen):
             if choosen[i] == '':
                 temp = self.gain(choosen, i)
+                print(temp)
                 if temp > gain:
                     gain = temp
                     actual = i
@@ -140,9 +142,8 @@ class DecisionTree:
         ent = 0
         for x in range(0, 5):
             p_x = self.getCountOfChoosenClass(choosen, x)/50
-            if p_x == 0:
-                p_x = 0.00001
-            ent +=  - p_x * math.log(p_x, 2)
+            if p_x != 0:
+                ent +=  - p_x * math.log(p_x, 2)
         return ent
     
     def gain(self, choosen, attr):
@@ -152,7 +153,8 @@ class DecisionTree:
         for x in options:
             entOptions = choosen.copy()
             entOptions[attr] = x
-            sum += 0.3 * self.entropy(entOptions) #example of probability
+            sum += random.random() * self.entropy(entOptions) #example of probability
+        gain -= sum
         return gain
     
     def choosenLength(self, choosen):
@@ -260,13 +262,14 @@ if __name__ == "__main__":
                         wyb.append(el5)
                         
                         type = decTree.predict(wyb)
-                        print(count)
+                        # print(count)
                         count += 1
                         if type == 'error':
                             error += 1
-                            print(wyb)
+                            # print(wyb)
                         else:
                             true += 1
+                            # print(type)
                             
     print('true: ', true)
     print('errors: ', error)
