@@ -1,5 +1,6 @@
 import json
 import math
+import random
 from pprint import pprint
 
 class DecisionTree:
@@ -97,6 +98,7 @@ class DecisionTree:
         while i < len(choosen):
             if choosen[i] == '':
                 temp = self.gain(choosen, i)
+                # print(temp)
                 if temp > gain:
                     gain = temp
                     actual = i
@@ -139,11 +141,20 @@ class DecisionTree:
         count = self.getCountOfChoosen(choosen)
         ent = 0
         for x in range(0, 5):
-            p_x = self.getCountOfChoosenClass(choosen, x)/50
-            if p_x == 0:
-                p_x = 0.00001
-            ent +=  - p_x * math.log(p_x, 2)
+            p_x = self.getCountOfChoosenClass(choosen, x)/self.getCountOfData()
+            if p_x != 0:
+                ent +=  - p_x * math.log(p_x, 2)
         return ent
+    
+    def getCountOfData(self):
+        count = 0
+        for el in self.data:
+            count += 1
+        return count
+    
+    def probably(self, choosen, attr):
+        p_x = self.getCountOfChoosenClass(choosen, attr)/self.getCountOfData()
+        return p_x
     
     def gain(self, choosen, attr):
         gain = self.entropy(['','','','',''])
@@ -152,7 +163,9 @@ class DecisionTree:
         for x in options:
             entOptions = choosen.copy()
             entOptions[attr] = x
-            sum += 0.3 * self.entropy(entOptions) #example of probability
+            sum += self.probably(choosen, attr) * self.entropy(entOptions) #example of probability
+            # sum += 0.3 * self.entropy(entOptions) #example of probability
+        gain -= sum
         return gain
     
     def choosenLength(self, choosen):
@@ -182,7 +195,7 @@ class DecisionTree:
                 else:
                     self.getTree(choosenCopy)
         elif self.choosenLength(choosen) < 5:
-            print(choosen)
+            # print(choosen)
             root = self.getNextNode(choosen)
             edges = self.getAllOptions(choosen, root)
             for e in edges:
@@ -225,7 +238,7 @@ class DecisionTree:
             if isGood:
                 return self.treetypes[i]
             i += 1
-        return 'error'
+        return self.treetypes[random.randrange(5)]
         
 
 if __name__ == "__main__":
@@ -260,13 +273,14 @@ if __name__ == "__main__":
                         wyb.append(el5)
                         
                         type = decTree.predict(wyb)
-                        print(count)
+                        # print(count)
                         count += 1
                         if type == 'error':
                             error += 1
-                            print(wyb)
+                            # print(wyb)
                         else:
                             true += 1
+                            # print(type)
                             
     print('true: ', true)
     print('errors: ', error)

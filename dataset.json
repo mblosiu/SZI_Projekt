@@ -421,5 +421,347 @@
 		"skupienie": "ciekly",
 		"nazwa": "",
 		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "prostokatny",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "okragly",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "okragly",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "lekkie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "okragly",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "srednie",
+		"wielkosc": "srednie",
+		"ksztalt": "brak",
+		"skupienie": "ciekle",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "prostokatny",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "prostokatny",
+		"skupienie": "ciekly",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "kolisty",
+		"skupienie": "ciekly",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "stale",
+		"nazwa": "",
+		"typ": "Zywnosc"
+	},
+	{
+		"twardosc": "kruche",
+		"waga": "ciezkie",
+		"wielkosc": "male",
+		"ksztalt": "brak",
+		"skupienie": "ciekly",
+		"nazwa": "",
+		"typ": "Zywnosc"
 	}
 ]
