@@ -66,7 +66,7 @@ class Obstacle(QTableWidgetItem):
         super().__init__()
         self.setIcon(QIcon("images/crate.png"))
 
-#####
+# GA TEST
 class CategorizedItem:
 
     def __init__(self, json_data):

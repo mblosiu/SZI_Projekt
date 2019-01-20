@@ -3,7 +3,7 @@ import random
 from pprint import pprint
 
 
-def distance(first_point: tuple, second_point: tuple) -> float:
+def distance(first_point: tuple, second_point: tuple):
     x_distance = (second_point[0] - first_point[0]) ** 2
     y_distance = (second_point[1] - first_point[1]) ** 2
     return math.sqrt(x_distance + y_distance)
@@ -47,33 +47,33 @@ class Route:
     def __init__(self, points: list):
         self.fitness = 0
         self.points = points
-        self.selection_probability = 0
 
-        # print(points)
-    # def calc_fitness(self):
-
-        for i in range(len(self.points)):
+        for i in range(1, len(self.points)):
             first_point = self.points[i]
 
-            if i + 1 == len(self.points):
-                second_point = self.points[0]
-            else:
-                second_point = self.points[i + 1]
+            second_point = self.points[i - 1]
+            # if i + 1 == len(self.points):
+            #     second_point = self.points[0]
+            # else:
+            #     second_point = self.points[i + 1]
 
             self.fitness += distance(first_point, second_point)
 
 
 class Population:
 
-    def __init__(self, list_of_routes: list, size: int,
+    def __init__(self, list_of_point_lists: list, size: int,
                  mutation_rate: int = 0.01):
 
         self.routes = []
         self.size = size
         self.mutation_rate = mutation_rate
 
-        for route in list_of_routes:
-            self.routes.append(Route(route))
+        self.overall_fitness = 0
+        for points in list_of_point_lists:
+            route = Route(points)
+            self.routes.append(route)
+            self.overall_fitness += route.fitness
 
         self.start_distance = self.routes[0].fitness
 
@@ -90,8 +90,6 @@ class Population:
 
         # pprint(self.selection_probabilities)
 
-        self.parents = []
-
         # print(parents)
         # print(size)
         #
@@ -106,12 +104,27 @@ class Population:
         #
         # print(parents)
 
+        self.parents = set()
+        # Ruletka
+        # while len(self.parents) < size // 2:
+        #     rand = random.randrange(0, round(self.overall_fitness))
+        #     val = self.overall_fitness
+        #
+        #     for route in self.routes:
+        #         val -= route.fitness
+        #         if val < rand:
+        #             self.parents.add(route)
+        #             break
+
+        #Turniej
         while len(self.parents) < size // 2:
             k = random.sample(self.routes, random.randint(2, len(self.routes)))
             best = min(k, key=lambda x: x.fitness)
 
-            if best not in self.parents:
-                self.parents.append(best)
+            self.parents.add(best)
+
+            # if best not in self.parents:
+            #     self.parents.append(best)
 
         # print(self.parents)
         # print(len(self.parents))
@@ -145,8 +158,8 @@ class Population:
 
 class GeneticAlgorithm:
 
-    def __init__(self, points: list, generations: int = 300,
-                 population_size: int = 100):
+    def __init__(self, points: list, generations: int = 100,
+                 population_size: int = 100, stop: int = 15):
 
         initial_population = []
         while len(initial_population) != population_size:
@@ -157,10 +170,22 @@ class GeneticAlgorithm:
 
         self.initial_cost = population.start_distance
 
-        for generation in range(0, generations):
+        init_cost = population.start_distance
+        no_change = 0
+
+        for generation in range(generations):
             population = Population(population.breed(), population_size)
-            print(f"Generacja {generation}: {population.start_distance}")
-            # print(population.fitness_sum)
+
+            if population.start_distance == init_cost:
+                no_change += 1
+            else:
+                init_cost = population.start_distance
+                no_change = 0
+
+            if no_change == stop:
+                break
+
+            # print(f"Generacja {generation}: {population.start_distance}")
 
         # print(f"Końcowy koszt: {population.start_distance}")
 
@@ -176,12 +201,13 @@ class GeneticAlgorithm:
 
 if __name__ == "__main__":
     # print(distance((-1, 1), (3, 4)))
-    secs = [(2, 16), (4, 7), (19, 3), (3, 3), (15, 0), (17, 5)]
-    initial = []
-    while len(initial) != 100:
-        initial.append(random.sample(secs, len(secs)))
+    sections = [(2, 16), (4, 7), (19, 3), (3, 3), (15, 0), (17, 5)]
+    # initial = []
+    # while len(initial) != 100:
+    #     initial.append(random.sample(secs, len(secs)))
 
-    gen = GeneticAlgorithm(initial)
+    gen = GeneticAlgorithm(sections)
+
     # pop = Population(initial, 100)
     # for r in pop.routes:
     #     print(r.points)

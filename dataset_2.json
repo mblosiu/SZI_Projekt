@@ -1,0 +1,822 @@
+[
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "chorzy",
+    "nazwa": "aspiryna",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "chorzy",
+    "nazwa": "aspiryna",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "pomidory",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "ziemniaki",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "jablka",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "banany",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "ogorek",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "mleko",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "ciezkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "laptop",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "smartphone",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "ciezkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "laptop",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "lego",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "glosniki",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "listwa elektryczna",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "chorzy",
+    "nazwa": "ibuprofen",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragle",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "jojo",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "karty",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "kolisty",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "myszka",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "klawiatura",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "chorzy",
+    "nazwa": "syrop",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "dorosli",
+    "nazwa": "sukienka",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "ciezkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "ziemia",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "frytki",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "dzem",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "jogurt",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "sluchawki",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "pendrive",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "kolisty",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "cytryna",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "kalendarz",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "kredki",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "blok techniczny",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "zeszyt a5",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "miekkie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "plastelina",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "bibuła",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "chorzy",
+    "nazwa": "apap",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "samochodzik",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "mezczyzni",
+    "nazwa": "cialis",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "chorzy",
+    "nazwa": "aprofen",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "kanciasty",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "konik bujany",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "domek",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "puzzle",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "odtwarzacz dvd",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "ciezkie",
+    "wielkosc": "duze",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "telewizor",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "konsola",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "komputer",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "dysk twardy",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "stale",
+    "przeznaczenie": "dorosli",
+    "nazwa": "marynarka",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "pilka",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "stozkowy",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "lotki",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "dlugi",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "skakanka",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "stale",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "dysk",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "stale",
+    "przeznaczenie": "dzieci",
+    "nazwa": "piłka kauczukowa",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "chorzy",
+    "nazwa": "bepanthen masc",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "chorzy",
+    "nazwa": "acodin syrop",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "kurtka",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "ciezkie",
+    "wielkosc": "srednie",
+    "ksztalt": "stozkowy",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "donica",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "lopata",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "sekator",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "kanciasty",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "karmnik",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "maslo",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "kanciasty",
+    "skupienie": "staly",
+    "przeznaczenie": "dzieci",
+    "nazwa": "hulajnoga",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "dzieci",
+    "nazwa": "ksiazeczka",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "dzieci",
+    "nazwa": "liczydlo",
+    "typ": "Zabawki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "bluza",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "dorosli",
+    "nazwa": "krawat",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "farba",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "kanciasty",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "czapka",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "buty",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "kolisty",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "platki",
+    "typ": "Zywnosc"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "segregator",
+    "typ": "Art. Pap."
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "chorzy",
+    "nazwa": "acerin plyn",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "kruche",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "brak",
+    "skupienie": "ciekly",
+    "przeznaczenie": "chorzy",
+    "nazwa": "acnelec krem",
+    "typ": "Leki"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "dlugi",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "kabel elektryczny",
+    "typ": "RTV"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "dlugi",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "szalik",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "pas",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "rekawiczki",
+    "typ": "odziez"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "nasiona aksamitki",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "lekkie",
+    "wielkosc": "male",
+    "ksztalt": "okragly",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "nasiona lobelii",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "ciezkie",
+    "wielkosc": "srednie",
+    "ksztalt": "kolisty",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "beczka 15l",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "srednie",
+    "waga": "lekkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "siatka przeciw owadom",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "srednie",
+    "wielkosc": "srednie",
+    "ksztalt": "kanciasty",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "konewka",
+    "typ": "Ogrodnictwo"
+  },
+  {
+    "twardosc": "twarde",
+    "waga": "ciezkie",
+    "wielkosc": "srednie",
+    "ksztalt": "prostokatny",
+    "skupienie": "staly",
+    "przeznaczenie": "wszyscy",
+    "nazwa": "kanister",
+    "typ": "Ogrodnictwo"
+  }
+]

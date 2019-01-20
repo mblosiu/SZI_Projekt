@@ -6,7 +6,7 @@ import random
 from collections import deque
 from pprint import pprint
 
-from PyQt5.QtCore import pyqtSlot, QTimer, pyqtSignal, QSize
+from PyQt5.QtCore import pyqtSlot, QTimer, pyqtSignal, QSize, QEventLoop
 from PyQt5.QtWidgets import QTableWidget
 
 from GeneticAlgorithm import GeneticAlgorithm
@@ -87,20 +87,6 @@ class GameBoard(QTableWidget):
         self.ga_info_changed.connect(self.board.update_ga_info)
 
         self.go_to_section.connect(self.find_path)
-
-        # if self.method == 2:
-        #
-        #     data = None
-        #     with open("ga_dataset.json") as f:
-        #         data = json.load(f)
-        #
-        #     while not self.cart.full_capacity():
-        #         for d in data:
-        #             x = CategorizedItem(d)
-        #             self.cart.add_item(x)
-        #
-        #     self.item_changed.emit(str(self.cart))
-        #     self.dropped_item.emit()
 
         self.overwritten_objects = []
 
@@ -249,6 +235,9 @@ class GameBoard(QTableWidget):
         if len(self.cart_directions) > 0:
             cart_x, cart_y = self.cart_pos()
 
+            if not self.cart.change_direction(self.cart_directions[0]):
+                return
+
             if self.cart_directions[0] == 'u':
                 next_x, next_y = cart_x - 1, cart_y
             if self.cart_directions[0] == 'd':
@@ -277,6 +266,9 @@ class GameBoard(QTableWidget):
 
             if len(self.cart_directions) == 0:
                 self.picked_item.emit()
+
+            # if len(self.cart_directions) == 0 and self.cart.transports_items:
+            #     print("Hello there")
             #
             # if len(self.cart_directions) == 0 and self.cart.has_item():
             #     self.dropped_item.emit()
@@ -332,9 +324,8 @@ class GameBoard(QTableWidget):
         if self.cart.transports_items:
             # self.ga_info_changed.emit("Obliczanie drogi..")
             if len(self.cart.sections_to_go) == 0:
-                sections = random.sample(self.sections,
-                                         len(self.sections))
-
+                sections = random.sample(self.sections, len(self.sections))
+                # self.cart.sections_to_go.append(self.cart_pos())
                 for sec in sections:
                     self.cart.sections_to_go.append((sec.row(), sec.column()))
 
@@ -342,7 +333,6 @@ class GameBoard(QTableWidget):
                 self.ga_info_changed.emit(str(ga))
                 self.cart.sections_to_go = ga.path
                 self.go_to_section.emit()
-
             else:
                 next_section = self.cart.sections_to_go.pop(0)
 
