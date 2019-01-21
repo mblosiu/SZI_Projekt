@@ -1,22 +1,19 @@
-import enum
 import heapq
-import json
+import heapq
 import math
+import pprint
 import random
 from collections import deque
-from pprint import pprint
 
-from PyQt5.QtCore import pyqtSlot, QTimer, pyqtSignal, QSize, QEventLoop
-from PyQt5.QtWidgets import QTableWidget
+from PyQt5.QtCore import pyqtSlot, QTimer, pyqtSignal
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
-from GeneticAlgorithm import GeneticAlgorithm
-
-from board_objects import BlankCell, RandomItem, Obstacle, CategorizedItem, \
-    TechSection, FoodSection, FloraSection, PaperSection, ClothSection, \
-    MedicineSection, ToySection, Section, GlassNuisance, PlankNuisance, \
-    WaterNuisance, Nuisance
-from cart import Cart
 from DecisionTree import DecisionTree
+from GeneticAlgorithm import GeneticAlgorithm
+from board_objects import BlankCell, RandomItem, Obstacle, TechSection, \
+    FoodSection, FloraSection, PaperSection, ClothSection, \
+    MedicineSection, ToySection, GlassNuisance, PlankNuisance, \
+    WaterNuisance, Cart
 
 
 class PQueue:
@@ -33,126 +30,98 @@ class PQueue:
         return heapq.heappop(self.elements)[1]
 
 
+def heuristic(a, b):
+    (x1, y1) = a
+    (x2, y2) = b
+    return math.sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2))
+
+
 class GameBoard(QTableWidget):
 
-    item_changed = pyqtSignal(str)
-    item_spawned = pyqtSignal(tuple)
-    picked_item = pyqtSignal()
-    dropped_item = pyqtSignal()
-    go_to_section = pyqtSignal()
-    ga_info_changed = pyqtSignal(str)
+    def set(self, coordinates: tuple, obj: QTableWidgetItem):
+        self.setItem(coordinates[0], coordinates[1], obj)
+
+    def __randomize_place(self, obj: QTableWidgetItem,
+                          min_row: int = 0, max_row: int = 0,
+                          min_col: int = 0, max_col: int = 0):
+        rows = self.rowCount()
+        cols = self.columnCount()
+
+        if not min_row:
+            min_row = 2
+        if not max_row:
+            max_row = rows
+        if not min_col:
+            min_col = 0
+        if not max_col:
+            max_col = cols
+
+        coordinates = (random.randrange(min_row, max_row),
+                       random.randrange(min_col, max_col))
+
+        while not self.blank(coordinates):
+            coordinates = (random.randrange(min_row, max_row),
+                           random.randrange(min_col, max_col))
+
+        self.set(coordinates, obj)
+
+    def __setup(self, cart: tuple = None, obstacles: int = random.randrange(30),
+                nuisances: int = random.randrange(30)):
+
+        rows = self.rowCount()
+        cols = self.columnCount()
+
+        [self.set((row, col), BlankCell())
+         for row in range(rows)
+         for col in range(cols)]
+
+        if not cart:
+            cart = (random.randrange(5, rows), random.randrange(cols))
+
+        self.set(cart, self.cart)
+
+        for section in self.sections:
+            self.__randomize_place(section)
+
+        [self.__randomize_place(Obstacle()) for _ in range(obstacles)]
+
+        for i in range(nuisances):
+            rand = random.randrange(3) % 3
+
+            if rand == 0:
+                self.__randomize_place(GlassNuisance())
+            elif rand == 1:
+                self.__randomize_place(WaterNuisance())
+            else:
+                self.__randomize_place(PlankNuisance())
+
+        y = random.randrange(cols)
+        rand = RandomItem()
+        self.set((0, y), rand)
+        self.item_queue.append(rand)
+
+    def get(self, coordinates: tuple) -> QTableWidgetItem:
+        return self.item(coordinates[0], coordinates[1])
+
+    def take(self, coordinates: tuple) -> QTableWidgetItem:
+        return self.takeItem(coordinates[0], coordinates[1])
+
+    def blank(self, coordinates: tuple) -> bool:
+        return isinstance(self.item(coordinates[0], coordinates[1]), BlankCell)
+
+    def passable(self, coordinates: tuple) -> bool:
+        return not isinstance(self.get(coordinates), Obstacle)
+        # return isinstance(item, BlankCell) or isinstance(item, Nuisance)
+
+    def in_bounds(self, coordinates: tuple) -> bool:
+        x, y = coordinates
+        return 0 <= x < self.rowCount() and 0 <= y < self.columnCount()
 
     def __init__(self, rows: int, columns: int, board, method):
         super().__init__(rows, columns, board)
 
         self.board = board
-
-        if method == 'Drzewa decyzyjne':
-            self.method = 1
-            self.tree = DecisionTree()
-            self.tree.getTree([])
-
-        self.clean()
-
-        self.item_queue = deque()
-        rand_y = random.randrange(0, self.columnCount())
-        self.setItem(0, rand_y, RandomItem())
-        self.item_queue.append((0, rand_y))
-
-        self.cart_path = []
-        self.cart_directions = []
-
         self.cart = Cart()
-        self.add_cart()
-
-        self.sections = []
-        self.add_sections()
-
-        self.add_obstacles()
-        self.add_nuisances()
-
-        self.spawn_timer = QTimer()
-        self.spawn_timer.timeout.connect(self.spawn_item)
-
-        self.cart_mover_timer = QTimer()
-        self.cart_mover_timer.timeout.connect(self.move_cart_pos)
-
-        self.picked_item.connect(self.remove_item)
-        self.picked_item.connect(self.find_path)
-
-        self.dropped_item.connect(self.put_item)
-        self.dropped_item.connect(self.find_path)
-
-        self.item_changed.connect(self.board.update_items_info)
-        self.ga_info_changed.connect(self.board.update_ga_info)
-
-        self.go_to_section.connect(self.find_path)
-
-        self.overwritten_objects = []
-
-    @pyqtSlot()
-    def start_simulation(self):
-        self.spawn_timer.start(100)
-        self.cart_mover_timer.start(50)
-        self.find_path()
-
-    def cart_pos(self):
-        return self.cart.row(), self.cart.column()
-
-    def section_pos(self, index):
-        return self.sections[index].row(), self.sections[index].column()
-
-    def clean(self):
-        for row in range(self.rowCount()):
-            for column in range(self.columnCount()):
-                self.setItem(row, column, BlankCell())
-
-    def is_blank(self, x: int, y: int):
-        return isinstance(self.item(x, y), BlankCell)
-
-    def is_passable(self, x, y):
-        item = self.item(x, y)
-        return not isinstance(item, Obstacle)
-        # return isinstance(item, BlankCell) or isinstance(item, Nuisance)
-
-    def is_in_bounds(self, coordinates: tuple):
-        x, y = coordinates
-        return 0 <= x < self.rowCount() and 0 <= y < self.columnCount()
-
-    def add_cart(self, x=None, y=None):
-        if x is None:
-            x = random.randrange(10, self.rowCount() - 1)
-        if y is None:
-            y = random.randrange(0, self.columnCount())
-
-        self.setItem(x, y, self.cart)
-
-    def add_obstacles(self, count=random.randint(0, 30)):
-        for i in range(count):
-            x = random.randint(2, self.rowCount() - 3)
-            y = random.randint(0, self.columnCount())
-
-            if self.is_blank(x, y):
-                self.setItem(x, y, Obstacle())
-
-    def add_nuisances(self, count=random.randint(10, 50)):
-        nuisances = 3
-
-        for i in range(count):
-            x = random.randint(2, self.rowCount())
-            y = random.randint(0, self.columnCount())
-
-            if self.is_blank(x, y):
-                rand_type = random.randrange(nuisances)
-
-                if rand_type == 0:
-                    self.setItem(x, y, GlassNuisance())
-                elif rand_type == 1:
-                    self.setItem(x, y, PlankNuisance())
-                elif rand_type == 2:
-                    self.setItem(x, y, WaterNuisance())
-
-    def add_sections(self):
 
         self.sections = [
             TechSection(),
@@ -164,15 +133,46 @@ class GameBoard(QTableWidget):
             ToySection()
         ]
 
-        for section in self.sections:
-            x = random.randint(2, self.rowCount())
-            y = random.randint(0, self.columnCount())
+        self.item_queue = deque()
 
-            while not self.is_blank(x, y):
-                x = random.randint(2, self.rowCount())
-                y = random.randint(0, self.columnCount())
+        self.__setup()
 
-            self.setItem(x, y, section)
+        if method == 'Drzewa decyzyjne':
+            self.method = 1
+            self.tree = DecisionTree()
+            self.tree.getTree([])
+
+        self.cart_path = []
+        self.cart_directions = []
+        self.sections_to_visit = []
+        self.overwritten_objects = []
+
+        self.spawn_timer = QTimer()
+        self.spawn_timer.timeout.connect(self.spawn_item)
+        self.spawn_timer.start(100)
+
+        self.cart_timer = QTimer()
+        self.cart_timer.timeout.connect(self.move_cart_pos)
+        self.cart_timer.start(150)
+
+        self.cart_items_changed.connect(self.board.update_items_info)
+
+        self.ga_info_changed.connect(self.board.update_ga_info)
+
+        self.cart_stopped.connect(self.find_path)
+        self.cart_stopped.emit()
+
+    cart_stopped = pyqtSignal()
+    cart_items_changed = pyqtSignal(str)
+    ga_info_changed = pyqtSignal(str)
+
+    def spawn_item(self):
+        rand = random.randint(0, self.columnCount())
+
+        if self.blank((0, rand)):
+            random_item = RandomItem()
+            self.set((0, rand), random_item)
+            self.item_queue.append(random_item)
 
     def astar(self, start_coordinates: tuple, goal_coordinates: tuple):
 
@@ -188,61 +188,42 @@ class GameBoard(QTableWidget):
                 break
 
             for next_item in self.neighbors(current):
-                # print(next_item)
                 new_cost = cost_so_far[current] - 1
-                # new_cost = cost_so_far[current] - self.item(next_item[0],
-                #                                             next_item[1]).cost
 
                 if next_item not in cost_so_far \
                         or new_cost > cost_so_far[next_item]:
                     cost_so_far[next_item] = new_cost
-                    priority = new_cost + self.heuristic(goal_coordinates,
-                                                         next_item)
+                    priority = new_cost + heuristic(goal_coordinates, next_item)
                     frontier.put(next_item, priority)
                     came_from[next_item] = current
 
         return came_from
 
-    def neighbors(self, coordinates: tuple):
+    def neighbors(self, coordinates: tuple) -> list:
         directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        result = []
+        results = []
 
         for direction in directions:
             neighbor = (coordinates[0] + direction[0],
                         coordinates[1] + direction[1])
 
-            if self.is_in_bounds(neighbor):
-                if self.is_passable(neighbor[0], neighbor[1]):
-                    result.append(neighbor)
+            results.append(neighbor)
 
-        return result
-
-    @staticmethod
-    def heuristic(a, b):
-        (x1, y1) = a
-        (x2, y2) = b
-        return math.sqrt(pow(abs(x1 - x2), 2) + pow(abs(y1 - y2), 2))
-
-    @pyqtSlot()
-    def spawn_item(self):
-        y = random.randrange(self.columnCount())
-
-        if self.is_blank(0, y):
-            self.setItem(0, y, RandomItem())
-            self.item_queue.append((0, y))
-
-    @pyqtSlot()
-    def put_item(self):
-        self.item_changed.emit(str(self.cart))
+        results = filter(self.in_bounds, results)
+        results = filter(self.passable, results)
+        return list(results)
 
     @pyqtSlot()
     def move_cart_pos(self):
+
         if len(self.cart_directions) > 0:
 
             if self.cart.change_direction(self.cart_directions[0]):
                 return
 
-            cart_x, cart_y = self.cart_pos()
+            cart_x, cart_y = self.cart.pos()
+            next_x = 0
+            next_y = 0
 
             if self.cart_directions[0] == 'u':
                 next_x, next_y = cart_x - 1, cart_y
@@ -253,60 +234,68 @@ class GameBoard(QTableWidget):
             if self.cart_directions[0] == 'r':
                 next_x, next_y = cart_x, cart_y + 1
 
-            item = self.takeItem(next_x, next_y)
+            item = self.take((next_x, next_y))
 
-            self.takeItem(cart_x, cart_y)
+            self.take((cart_x, cart_y))
 
-            self.setItem(next_x, next_y, self.cart)
+            self.set((next_x, next_y), self.cart)
+
+            coordinates = (cart_x, cart_y)
 
             if len(self.overwritten_objects) == 0:
-                self.setItem(cart_x, cart_y, BlankCell())
-
-            if len(self.overwritten_objects) > 0:
-                self.setItem(cart_x, cart_y, self.overwritten_objects.pop(0))
+                self.set(coordinates, BlankCell())
+            else:
+                self.set(coordinates, self.overwritten_objects.pop(0))
 
             self.overwritten_objects.append(item)
 
             self.cart_path.pop(0)
             self.cart_directions.pop(0)
 
-            if len(self.cart_directions) == 0:
+            if len(self.cart_path) == 0:
                 if not self.cart.transports_items:
-                    self.picked_item.emit()
-                else:
-                    if len(self.cart.palette) == 0:
-                        self.cart.transports_items = False
-                        self.dropped_item.emit()
-                    else:
-                        self.cart.palette.pop(0)
-                        self.go_to_section.emit()
-                        self.item_changed.emit(str(self.cart))
+                    picked_item = self.item_queue.popleft()
 
-    @pyqtSlot()
-    def remove_item(self):
-        picked_item = self.item_queue.popleft()
-        self.cart.add_item(self.item(picked_item[0], picked_item[1]))
-        self.setItem(picked_item[0], picked_item[1], BlankCell())
-        self.item_changed.emit(str(self.cart))
-    
+                    self.cart.add(picked_item)
+                    self.set(picked_item.pos(), BlankCell())
+
+                    if self.cart.full():
+                        self.cart.transports_items = True
+
+                else:
+                    # TODO Zostawianie dobrego przedmiotu
+                    self.cart.palette.pop(0)
+                    self.sections_to_visit.pop(0)
+
+                    if len(self.sections_to_visit) == 0:
+                        self.cart.transports_items = False
+
+                self.cart_items_changed.emit(str(self.cart))
+                self.cart_stopped.emit()
+
+
     @pyqtSlot()
     def find_path(self):
 
-        if not self.cart.full_capacity() and not self.cart.transports_items:
-            next_item = self.item_queue[0]
+        # Zbieraj przedmioty
+        if not self.cart.full() and not self.cart.transports_items:
+            next_item = self.item_queue[0].pos()
             x, y = next_item[0] + 1, next_item[1]
 
-            route = self.astar(self.cart_pos(), (x, y))
+            route = self.astar(self.cart.pos(), (x, y))
+            # pprint.pprint(route.values())
 
+            # self.cart_path = list(route.values())
             for point in route.values():
-                if point and point != self.cart_pos():
-                    if self.is_passable(point[0], point[1]):
+                if point and point != self.cart.pos():
+                    if self.passable(point):
                         if (point[0], point[1]) not in self.cart_path:
                             self.cart_path.append(point)
+            # print(self.cart_path)
 
-            cart_x, cart_y = self.cart_pos()
+            cart_x, cart_y = self.cart.pos()
 
-            for i in range(0, len(self.cart_path)):
+            for i in range(len(self.cart_path)):
                 if i == 0:
                     if cart_x > self.cart_path[i][0]:
                         self.cart_directions.append('u')
@@ -326,165 +315,49 @@ class GameBoard(QTableWidget):
                     elif self.cart_path[i-1][1] < self.cart_path[i][1]:
                         self.cart_directions.append('r')
 
-        elif self.cart.full_capacity() and not self.cart.transports_items:
-            self.cart.transports_items = True
-
-        # TODO Połączenie z drzewem/siecią
+        # Odstaw przedmioty
         if self.cart.transports_items:
-            if len(self.cart.sections_to_go) == 0:
-                # self.cart.transports_items = False
-
+            # TODO Drzewo przekazuje sekcje
+            if len(self.sections_to_visit) == 0:
                 sections = random.sample(self.sections, len(self.sections))
 
-                for sec in sections:
-                    self.cart.sections_to_go.append((sec.row(), sec.column()))
+                for section in sections:
+                    self.sections_to_visit.append(section.pos())
 
-                ga = GeneticAlgorithm(self.cart.sections_to_go)
+                ga = GeneticAlgorithm(self.sections_to_visit)
                 self.ga_info_changed.emit(str(ga))
-                self.cart.sections_to_go = ga.path
-                self.go_to_section.emit()
-            else:
-                next_section = self.cart.sections_to_go.pop(0)
+                self.sections_to_visit = ga.path
 
-                route = self.astar(self.cart_pos(), (next_section[0],
-                                                     next_section[1]))
+            # FIXME POWTARZANIE KODU
+            next_section = self.sections_to_visit[0]
+            x, y = next_section[0], next_section[1]
 
-                for point in route.values():
-                    if point and point != self.cart_pos():
-                        if self.is_passable(point[0], point[1]):
-                            if (point[0], point[1]) not in self.cart_path:
-                                self.cart_path.append(point)
+            route = self.astar(self.cart.pos(), (x, y))
 
-                cart_x, cart_y = self.cart_pos()
+            for point in route.values():
+                if point and point != self.cart.pos():
+                    if self.passable(point):
+                        if (point[0], point[1]) not in self.cart_path:
+                            self.cart_path.append(point)
 
-                for i in range(len(self.cart_path)):
-                    if i == 0:
-                        if cart_x > self.cart_path[i][0]:
-                            self.cart_directions.append('u')
-                        elif cart_x < self.cart_path[i][0]:
-                            self.cart_directions.append('d')
-                        elif cart_y > self.cart_path[i][1]:
-                            self.cart_directions.append('l')
-                        elif cart_y < self.cart_path[i][1]:
-                            self.cart_directions.append('r')
-                    else:
-                        if self.cart_path[i - 1][0] > self.cart_path[i][0]:
-                            self.cart_directions.append('u')
-                        elif self.cart_path[i - 1][0] < self.cart_path[i][0]:
-                            self.cart_directions.append('d')
-                        elif self.cart_path[i - 1][1] > self.cart_path[i][1]:
-                            self.cart_directions.append('l')
-                        elif self.cart_path[i - 1][1] < self.cart_path[i][1]:
-                            self.cart_directions.append('r')
+            cart_x, cart_y = self.cart.pos()
 
-
-
-        # if self.method == 1:
-        #     # print(self.cart.get_item().size)
-        #     attr = [self.cart.get_item(len(self.cart.palette)).hardness, self.cart.get_item(len(self.cart.palette)).weight, self.cart.get_item(len(self.cart.palette)).size,
-        #             self.cart.get_item(len(self.cart.palette)).shape, self.cart.get_item(len(self.cart.palette)).condensation]
-        #     type = self.tree.predict(attr)
-        #     self.item_changed.emit(type)
-        #     print(type)
-        #     if type == 'RTV':
-        #         section = self.sections[0]
-        #     elif type == 'Zywnosc':
-        #         section = self.sections[1]
-        #     elif type == 'Ogrodnictwo':
-        #         section = self.sections[2]
-        #     elif type == 'Art. Pap.':
-        #         section = self.sections[3]
-        #     elif type == 'odziez':
-        #         section = self.sections[4]
-        #     else:
-        #         random_section = random.choice(self.sections)
-        #
-        #     x, y = section.row(), section.column()
-        # else:
-        #     random_section = random.choice(self.sections)
-        #     x, y = random_section.row(), random_section.column()
-
-
-        # if self.cart.full_capacity() or self.method == 2:
-        #
-        #     points = set()
-        #     # points.add(self.cart_pos())
-        #
-        #     for item in self.cart.palette:
-        #         section_type = item.attributes["typ"]
-        #
-        #         if section_type == "RTV":
-        #             points.add(self.section_pos(0))
-        #         elif section_type == "Zywnosc":
-        #             points.add(self.section_pos(1))
-        #         elif section_type == "Ogrodnictwo":
-        #             points.add(self.section_pos(2))
-        #         elif section_type == "Art. Pap.":
-        #             points.add(self.section_pos(3))
-        #         elif section_type == "Odziez":
-        #             points.add(self.section_pos(4))
-        #
-        #     print(points)
-        #     # gen = GeneticAlgorithm.GeneticAlgorithm(list(points))
-        #     return
-        #
-        # if not self.cart.full_capacity():
-        #     next_item = self.item_queue[0]
-        #     x, y = next_item[0] + 1, next_item[1]
-
-        # if self.cart.has_item():
-        #     if self.method == 1:
-        #         # print(self.cart.get_item().size)
-        #         attr = [self.cart.get_item(len(self.cart.palette)).hardness, self.cart.get_item(len(self.cart.palette)).weight, self.cart.get_item(len(self.cart.palette)).size,
-        #                 self.cart.get_item(len(self.cart.palette)).shape, self.cart.get_item(len(self.cart.palette)).condensation]
-        #         type = self.tree.predict(attr)
-        #         self.item_changed.emit(type)
-        #         print(type)
-        #         if type == 'RTV':
-        #             section = self.sections[0]
-        #         elif type == 'Zywnosc':
-        #             section = self.sections[1]
-        #         elif type == 'Ogrodnictwo':
-        #             section = self.sections[2]
-        #         elif type == 'Art. Pap.':
-        #             section = self.sections[3]
-        #         elif type == 'odziez':
-        #             section = self.sections[4]
-        #         else:
-        #             random_section = random.choice(self.sections)
-        #         x, y = section.row(), section.column()
-        #     else:
-        #         random_section = random.choice(self.sections)
-        #         x, y = random_section.row(), random_section.column()
-        # else:
-        #     next_item = self.item_queue[0]
-        #     x, y = next_item[0] + 1, next_item[1]
-
-        # route = self.astar(self.cart_pos(), (x, y))
-        #
-        # for point in route.values():
-        #     if point and point != self.cart_pos():
-        #         if self.is_passable(point[0], point[1]):
-        #             if (point[0], point[1]) not in self.cart_path:
-        #                 self.cart_path.append(point)
-        #
-        # cart_x, cart_y = self.cart_pos()
-        # for i in range(0, len(self.cart_path)):
-        #     if i == 0:
-        #         if cart_x > self.cart_path[i][0]:
-        #             self.cart_directions.append('u')
-        #         elif cart_x < self.cart_path[i][0]:
-        #             self.cart_directions.append('d')
-        #         elif cart_y > self.cart_path[i][1]:
-        #             self.cart_directions.append('l')
-        #         elif cart_y < self.cart_path[i][1]:
-        #             self.cart_directions.append('r')
-        #     else:
-        #         if self.cart_path[i-1][0] > self.cart_path[i][0]:
-        #             self.cart_directions.append('u')
-        #         elif self.cart_path[i-1][0] < self.cart_path[i][0]:
-        #             self.cart_directions.append('d')
-        #         elif self.cart_path[i-1][1] > self.cart_path[i][1]:
-        #             self.cart_directions.append('l')
-        #         elif self.cart_path[i-1][1] < self.cart_path[i][1]:
-        #             self.cart_directions.append('r')
+            for i in range(len(self.cart_path)):
+                if i == 0:
+                    if cart_x > self.cart_path[i][0]:
+                        self.cart_directions.append('u')
+                    elif cart_x < self.cart_path[i][0]:
+                        self.cart_directions.append('d')
+                    elif cart_y > self.cart_path[i][1]:
+                        self.cart_directions.append('l')
+                    elif cart_y < self.cart_path[i][1]:
+                        self.cart_directions.append('r')
+                else:
+                    if self.cart_path[i - 1][0] > self.cart_path[i][0]:
+                        self.cart_directions.append('u')
+                    elif self.cart_path[i - 1][0] < self.cart_path[i][0]:
+                        self.cart_directions.append('d')
+                    elif self.cart_path[i - 1][1] > self.cart_path[i][1]:
+                        self.cart_directions.append('l')
+                    elif self.cart_path[i - 1][1] < self.cart_path[i][1]:
+                        self.cart_directions.append('r')
