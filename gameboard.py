@@ -8,7 +8,7 @@ from collections import deque
 from PyQt5.QtCore import pyqtSlot, QTimer, pyqtSignal
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
-from DecisionTree import DecisionTree
+from ID3 import DecisionTree
 from GeneticAlgorithm import GeneticAlgorithm
 from board_objects import BlankCell, RandomItem, Obstacle, TechSection, \
     FoodSection, FloraSection, PaperSection, ClothSection, \
@@ -137,10 +137,10 @@ class GameBoard(QTableWidget):
 
         self.__setup()
 
-        if method == 'Drzewa decyzyjne':
-            self.method = 1
-            self.tree = DecisionTree()
-            self.tree.getTree([])
+        #if method == 'Drzewa decyzyjne':
+        self.method = 1
+        self.tree = DecisionTree()
+        self.tree.getTree([])
 
         self.cart_path = []
         self.cart_directions = []
@@ -318,9 +318,29 @@ class GameBoard(QTableWidget):
         # Odstaw przedmioty
         if self.cart.transports_items:
             # TODO Drzewo przekazuje sekcje
+            # print(self.tree.predict([self.cart.palette[0].hardness, self.cart.palette[0].weight, self.cart.palette[0].size, self.cart.palette[0].shape, self.cart.palette[0].condensation, self.cart.palette[0].przeznaczenie]))
             if len(self.sections_to_visit) == 0:
-                sections = random.sample(self.sections, len(self.sections))
-
+                # sections = random.sample(self.sections, len(self.sections))
+                sections = []
+                for el in self.cart.palette:
+                    type = self.tree.predict([el.hardness, el.weight, el.size, el.shape, el.condensation, el.przeznaczenie])
+                    
+                    if type == 'RTV':
+                        typeSecition = self.sections[0]
+                    elif type == 'Zywnosc':
+                        typeSecition = self.sections[1]
+                    elif type == 'Ogrodnictwo':
+                        typeSecition = self.sections[2]
+                    elif type == 'Art. Pap.':
+                        typeSecition = self.sections[3]
+                    elif type == 'odziez':
+                        typeSecition = self.sections[4]
+                    elif type == 'Leki':
+                        typeSecition = self.sections[5]
+                    else:
+                        typeSecition = self.sections[6]
+                    if typeSecition not in sections:
+                        sections.append(typeSecition)
                 for section in sections:
                     self.sections_to_visit.append(section.pos())
 

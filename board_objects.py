@@ -28,12 +28,14 @@ class RandomItem(BoardObject):
         size = ['male', 'srednie']
         shape = ['prostokatny', 'okragly', 'kolisty', 'brak', ]
         condensation = ['stale', 'ciekly']
+        przeznaczenie = ['dzieci', 'dorosli', 'wszyscy', 'chorzy']
 
         self.hardness = hardness[random.randint(0, 2)]
         self.weight = weight[random.randint(0, 2)]
         self.size = size[random.randint(0, 1)]
         self.shape = shape[random.randint(0, 3)]
         self.condensation = condensation[random.randint(0, 1)]
+        self.przeznaczenie = przeznaczenie[random.randint(0, 3)]
 
         self.attributes = {
             "twardosc": self.hardness,
