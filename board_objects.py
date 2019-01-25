@@ -43,6 +43,7 @@ class RandomItem(BoardObject):
             "wielkosc": self.size,
             "ksztalt": self.shape,
             "skupienie": self.condensation,
+            "przeznaczenie": self.przeznaczenie
         }
 
     def __str__(self):
@@ -74,10 +75,12 @@ class Cart(BoardObject):
             Direction.WEST: QIcon("images/forklift_left.png")
         }
 
+
         super().__init__(self.icon_dict[direction])
 
         self.MAX_ITEMS = 7
         self.palette = []
+        self.palette_sections = []
         self.transports_items = False
         self.direction = direction
 

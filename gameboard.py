@@ -122,6 +122,7 @@ class GameBoard(QTableWidget):
 
         self.board = board
         self.cart = Cart()
+        self.palette_sections = []
 
         self.sections = [
             TechSection(),
@@ -257,16 +258,32 @@ class GameBoard(QTableWidget):
                     picked_item = self.item_queue.popleft()
 
                     self.cart.add(picked_item)
+                    # print(picked_item.hardness)
+                    # self.cart.palette_sections.append(self.tree.predict([picked_item.hardness, picked_item.weight, picked_item.size, picked_item.shape, picked_item.condensation, picked_item.przeznaczenie]))
                     self.set(picked_item.pos(), BlankCell())
 
                     if self.cart.full():
                         self.cart.transports_items = True
+                        self.cart.transports_items = True
 
                 else:
                     # TODO Zostawianie dobrego przedmiotu
-                    self.cart.palette.pop(0)
+                    actual_type = self.cart.palette_sections[0]
+                    to_delete = []
+                    for i, el in reversed(list(enumerate(self.cart.palette))):
+                        # print(i)
+                        print(i, self.cart.palette_sections[i], actual_type)
+                        if self.cart.palette_sections[i] == actual_type:
+                            # self.cart.palette.pop(i)
+                            to_delete.append(i)
+                            # self.cart.palette_sections.pop(i)
+                    # self.cart.palette.pop(0)
+                    # print(to_delete)
+                    for el in to_delete:
+                        self.cart.palette.pop(el)
+                        self.cart.palette_sections.pop(el)
                     self.sections_to_visit.pop(0)
-
+                    # self.cart.palette_sections.pop(0)
                     if len(self.sections_to_visit) == 0:
                         self.cart.transports_items = False
 
@@ -339,11 +356,13 @@ class GameBoard(QTableWidget):
                         typeSecition = self.sections[5]
                     else:
                         typeSecition = self.sections[6]
+                    self.cart.palette_sections.append(type)
                     if typeSecition not in sections:
                         sections.append(typeSecition)
+                print(sections)
                 for section in sections:
                     self.sections_to_visit.append(section.pos())
-
+                print(self.sections_to_visit)
                 ga = GeneticAlgorithm(self.sections_to_visit)
                 self.ga_info_changed.emit(str(ga))
                 self.sections_to_visit = ga.path
