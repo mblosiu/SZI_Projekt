@@ -6,13 +6,13 @@ from pprint import pprint
 class DecisionTree:
     
     def __init__(self):
-        with open('dataset.json') as f:
+        with open('dataset_2.json') as f:
             self.data = json.load(f)
         # self.tree = {}
         self.tree = []
         self.treetypes = []
-        self.attr = ['twardosc', 'waga', 'wielkosc', 'ksztalt', 'skupienie']
-        self.classes = ['RTV', 'Zywnosc', 'Ogrodnictwo', 'Art. Pap.', 'odziez']
+        self.attr = ['twardosc', 'waga', 'wielkosc', 'ksztalt', 'skupienie', 'przeznaczenie']
+        self.classes = ['RTV', 'Zywnosc', 'Ogrodnictwo', 'Art. Pap.', 'odziez', 'Zabawki', 'Leki']
         
     def addNodeToTree(self, choosen, endPoint):
         # self.tree[choosen[0], choosen[1], choosen[2], choosen[3], choosen[4]] = endPoint
@@ -43,6 +43,10 @@ class DecisionTree:
                 if el[self.attr[4]] != choosen[4]:
                     isGood = False
                     
+            if choosen[5] != '':
+                if el[self.attr[5]] != choosen[5]:
+                    isGood = False
+                    
             if isGood:
                 if el['typ'] not in results:
                     results.append(el['typ'])
@@ -71,6 +75,10 @@ class DecisionTree:
             if choosen[4] != '':
                 if el[self.attr[4]] != choosen[4]:
                     isGood = False
+                    
+            if choosen[5] != '':
+                if el[self.attr[5]] != choosen[5]:
+                    isGood = False
             
             if el[self.attr[root]] not in options and isGood:
                 options.append(el[self.attr[root]])
@@ -80,7 +88,7 @@ class DecisionTree:
         options = []
         for el in self.data:
             isGood = True
-            for x in range(0, 5):
+            for x in range(0, 6):
                 if choosen[x] == '':
                     continue
                 else:
@@ -140,7 +148,7 @@ class DecisionTree:
         entropy = 0
         count = self.getCountOfChoosen(choosen)
         ent = 0
-        for x in range(0, 5):
+        for x in range(0, 6):
             p_x = self.getCountOfChoosenClass(choosen, x)/self.getCountOfData()
             if p_x != 0:
                 ent +=  - p_x * math.log(p_x, 2)
@@ -181,7 +189,7 @@ class DecisionTree:
         nodes = []
         if len(choosen) == 0:
             # print(choosen)
-            choosen = ['','','','','']
+            choosen = ['','','','','','']
             root = self.getNextNode(choosen) #return optimal node
             edges = self.getAllOptions(choosen, root)
             # print(edges)
@@ -235,10 +243,14 @@ class DecisionTree:
                 if self.tree[i][4] != choosen[4]:
                     isGood = False
                     
+            if self.tree[i][5] != '':
+                if self.tree[i][5] != choosen[5]:
+                    isGood = False
+                    
             if isGood:
                 return self.treetypes[i]
             i += 1
-        return self.treetypes[random.randrange(5)]
+        return self.treetypes[random.randrange(6)]
         
 
 if __name__ == "__main__":
@@ -254,6 +266,7 @@ if __name__ == "__main__":
     wi = ['male', 'srednie']
     ksz = ['prostokatny', 'okragly', 'kolisty', 'brak', ]
     sk = ['stale', 'ciekly']
+    prz = ['dzieci', 'dorosli', 'wszyscy', 'chorzy']
     
     true = 0
     false = 0
@@ -265,22 +278,24 @@ if __name__ == "__main__":
             for el3 in wi:
                 for el4 in ksz:
                     for el5 in sk:
-                        wyb = []
-                        wyb.append(el1)
-                        wyb.append(el2)
-                        wyb.append(el3)
-                        wyb.append(el4)
-                        wyb.append(el5)
+                        for el6 in prz:
+                            wyb = []
+                            wyb.append(el1)
+                            wyb.append(el2)
+                            wyb.append(el3)
+                            wyb.append(el4)
+                            wyb.append(el5)
+                            wyb.append(el6)
                         
-                        type = decTree.predict(wyb)
-                        # print(count)
-                        count += 1
-                        if type == 'error':
-                            error += 1
-                            # print(wyb)
-                        else:
-                            true += 1
-                            # print(type)
+                            type = decTree.predict(wyb)
+                            # print(count)
+                            count += 1
+                            if type == 'error':
+                                error += 1
+                                # print(wyb)
+                            else:
+                                true += 1
+                                # print(type)
                             
     print('true: ', true)
     print('errors: ', error)
