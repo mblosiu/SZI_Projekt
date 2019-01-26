@@ -14,6 +14,7 @@ from board_objects import BlankCell, RandomItem, Obstacle, TechSection, \
     FoodSection, FloraSection, PaperSection, ClothSection, \
     MedicineSection, ToySection, GlassNuisance, PlankNuisance, \
     WaterNuisance, Cart
+from NeuronNet import NeuralNetwork
 
 
 class PQueue:
@@ -139,11 +140,13 @@ class GameBoard(QTableWidget):
         self.item_queue = deque()
 
         self.__setup()
-
-        #if method == 'Drzewa decyzyjne':
-        self.method = 1
-        self.tree = DecisionTree()
-        self.tree.getTree([])
+        if (method == 'Drzewa decyzyjne'):
+            self.method = 1
+            self.tree = DecisionTree()
+            self.tree.getTree([])
+        else:
+            self.method = 2
+            self.NN = NeuralNetwork()
 
         self.cart_path = []
         self.cart_directions = []
@@ -365,23 +368,26 @@ class GameBoard(QTableWidget):
                 # sections = random.sample(self.sections, len(self.sections))
                 sections = []
                 for el in self.cart.palette:
-                    type = self.tree.predict([el.hardness, el.weight, el.size, el.shape, el.condensation, el.przeznaczenie])
-                    
-                    if type == 'RTV':
+                    if(self.method == 1):
+                        typ = self.tree.predict([el.hardness, el.weight, el.size, el.shape, el.condensation, el.przeznaczenie])
+                    else:
+                        typ = self.NN.predict(el.hardness, el.weight, el.size, el.shape, el.condensation)
+                    print(typ)
+                    if typ == 'RTV':
                         typeSecition = self.sections[0]
-                    elif type == 'Zywnosc':
+                    elif typ == 'Zywnosc':
                         typeSecition = self.sections[1]
-                    elif type == 'Ogrodnictwo':
+                    elif typ == 'Ogrodnictwo':
                         typeSecition = self.sections[2]
-                    elif type == 'Art. Pap.':
+                    elif typ == 'Art. Pap.':
                         typeSecition = self.sections[3]
-                    elif type == 'odziez':
+                    elif typ == 'odziez':
                         typeSecition = self.sections[4]
-                    elif type == 'Leki':
+                    elif typ == 'Leki':
                         typeSecition = self.sections[5]
                     else:
                         typeSecition = self.sections[6]
-                    self.cart.palette_sections.append(type)
+                    self.cart.palette_sections.append(typ)
                     if typeSecition not in sections:
                         sections.append(typeSecition)
                 # print(sections)

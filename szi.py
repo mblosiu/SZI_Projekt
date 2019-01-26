@@ -62,7 +62,7 @@ class SziWindow(QWidget):
 
     @pyqtSlot(int, str)
     def use_teaching_method(self, method: TeachingMethod, method_name: str):
-        BoardWindow(method)
+        BoardWindow(method_name)
 
 
 if __name__ == '__main__':
