@@ -298,8 +298,10 @@ class GameBoard(QTableWidget):
         newIndex = 0
         while math.fabs(self.cart.pos()[1] - next_item[1]) < 4 and math.fabs(self.cart.pos()[0] - next_item[0] < 2):
             newIndex = random.randint(0, len(self.item_queue))
-            print(newIndex)
-            next_item = self.item_queue[newIndex].pos()
+            try:
+                next_item = self.item_queue[newIndex].pos()
+            except IndexError:
+                continue
         self.queueIndex = newIndex
         return next_item
             
@@ -310,7 +312,7 @@ class GameBoard(QTableWidget):
         # Zbieraj przedmioty
         if not self.cart.full() and not self.cart.transports_items:
             # next_item = self.item_queue[0].pos()
-            print(len(self.item_queue))
+            # print(len(self.item_queue))
             next_item = self.next_item_generator()
             
             # next_item = self.item_queue[random.randint(0, len(self.item_queue))].pos()
