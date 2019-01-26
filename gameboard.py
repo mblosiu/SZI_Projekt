@@ -124,6 +124,8 @@ class GameBoard(QTableWidget):
         self.cart = Cart()
         self.palette_sections = []
 
+        self.queueIndex = 0
+        
         self.sections = [
             TechSection(),
             FoodSection(),
@@ -255,11 +257,11 @@ class GameBoard(QTableWidget):
 
             if len(self.cart_path) == 0:
                 if not self.cart.transports_items:
-                    picked_item = self.item_queue.popleft()
+                    # picked_item = self.item_queue.popleft()
+                    picked_item = self.item_queue[self.queueIndex]
+                    del self.item_queue[self.queueIndex]
 
                     self.cart.add(picked_item)
-                    # print(picked_item.hardness)
-                    # self.cart.palette_sections.append(self.tree.predict([picked_item.hardness, picked_item.weight, picked_item.size, picked_item.shape, picked_item.condensation, picked_item.przeznaczenie]))
                     self.set(picked_item.pos(), BlankCell())
 
                     if self.cart.full():
@@ -272,7 +274,7 @@ class GameBoard(QTableWidget):
                     to_delete = []
                     for i, el in reversed(list(enumerate(self.cart.palette))):
                         # print(i)
-                        print(i, self.cart.palette_sections[i], actual_type)
+                        # print(i, self.cart.palette_sections[i], actual_type)
                         if self.cart.palette_sections[i] == actual_type:
                             # self.cart.palette.pop(i)
                             to_delete.append(i)
@@ -291,15 +293,36 @@ class GameBoard(QTableWidget):
                 self.cart_stopped.emit()
 
 
+    def next_item_generator(self):
+        next_item = self.item_queue[0].pos()
+        newIndex = 0
+        while math.fabs(self.cart.pos()[1] - next_item[1]) < 4 and math.fabs(self.cart.pos()[0] - next_item[0] < 2):
+            newIndex = random.randint(0, len(self.item_queue))
+            print(newIndex)
+            next_item = self.item_queue[newIndex].pos()
+        self.queueIndex = newIndex
+        return next_item
+            
+                
     @pyqtSlot()
     def find_path(self):
 
         # Zbieraj przedmioty
         if not self.cart.full() and not self.cart.transports_items:
-            next_item = self.item_queue[0].pos()
+            # next_item = self.item_queue[0].pos()
+            print(len(self.item_queue))
+            next_item = self.next_item_generator()
+            
+            # next_item = self.item_queue[random.randint(0, len(self.item_queue))].pos()
+            # print('cartpos')
+            # print(self.cart.pos()[1])
+            # print('cartpos')
             x, y = next_item[0] + 1, next_item[1]
 
             route = self.astar(self.cart.pos(), (x, y))
+            # pprint.pprint('przedmiot')
+            # pprint.pprint((x, y))
+            # pprint.pprint(len(route))
             # pprint.pprint(route.values())
 
             # self.cart_path = list(route.values())
@@ -359,10 +382,10 @@ class GameBoard(QTableWidget):
                     self.cart.palette_sections.append(type)
                     if typeSecition not in sections:
                         sections.append(typeSecition)
-                print(sections)
+                # print(sections)
                 for section in sections:
                     self.sections_to_visit.append(section.pos())
-                print(self.sections_to_visit)
+                # print(self.sections_to_visit)
                 ga = GeneticAlgorithm(self.sections_to_visit)
                 self.ga_info_changed.emit(str(ga))
                 self.sections_to_visit = ga.path
